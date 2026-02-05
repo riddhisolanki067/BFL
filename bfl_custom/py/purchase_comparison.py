@@ -49,7 +49,7 @@ def get_data(pi):
                 ON pi.name = pii.parent
             WHERE
                 pii.item_code IN %(item_list)s
-                AND pi.docstatus = 1
+                AND pi.docstatus != 2
                 AND pi.name != %(current_pi)s
             ORDER BY pi.posting_date DESC
             LIMIT 5
