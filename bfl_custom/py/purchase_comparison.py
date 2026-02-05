@@ -19,29 +19,45 @@ def get_data(pi):
     history = {}
 
     for d in pi_doc.items:
+
+        # Get template item
+        item_doc = frappe.get_doc("Item", d.item_code)
+
+        template_item = item_doc.variant_of or d.item_code
+
+        # Get all variants of template
+        variants = frappe.get_all(
+            "Item",
+            filters={"variant_of": template_item},
+            pluck="name"
+        )
+
+        # Include template itself
+        item_list = variants + [template_item]
+
         history[d.item_code] = frappe.db.sql("""
             SELECT
-                pi.name,
                 pi.supplier,
-                pi.posting_date,
+                pi.name,
                 pi.bill_no,
-                pi.bill_date,
-                pi.remarks,
-                pi.status,
-                pii.item_name,
+                pi.posting_date,
+                pii.item_code,
                 pii.qty,
-                pii.rate,
-                pii.uom,
-                pii.rejected_qty
+                pii.rate
             FROM `tabPurchase Invoice Item` pii
-            JOIN `tabPurchase Invoice` pi ON pi.name = pii.parent
+            INNER JOIN `tabPurchase Invoice` pi
+                ON pi.name = pii.parent
             WHERE
-                pii.item_code = %s
-                AND pi.docstatus != 2
-                AND pi.name != %s
+                pii.item_code IN %(item_list)s
+                AND pi.docstatus = 1
+                AND pi.name != %(current_pi)s
             ORDER BY pi.posting_date DESC
             LIMIT 5
-        """, (d.item_code, pi), as_dict=True)
+        """, {
+            "item_list": item_list,
+            "current_pi": pi_doc.name
+        }, as_dict=True)
+
 
     return {
         "pi": {
