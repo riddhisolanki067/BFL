@@ -42,6 +42,7 @@ def get_data(pi):
                 pi.bill_no,
                 pi.posting_date,
                 pii.item_code,
+                pii.uom,
                 pii.qty,
                 pii.rate
             FROM `tabPurchase Invoice Item` pii

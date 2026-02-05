@@ -175,7 +175,7 @@ function render_html(data) {
                 <td>${r.bill_no}</td>
                 <td>${r.name}</td>
                 <td>${frappe.datetime.str_to_user(r.posting_date)}</td>
-                <td>${r.item_name}</td>
+                <td>${r.item_code}</td>
                 <td>${r.uom}</td>
                 <td>${r.qty}</td>
                 <td>${r.qty}</td>
