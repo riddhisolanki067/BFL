@@ -56,7 +56,7 @@ def payment_discount(doc,method):
         doc.deductions = []
 
         doc.append("deductions", {
-            "account": "Discount Received - RPL - RPL",
+            "account": "Discount Received - BFL",
             "amount": -discount_amount,
             "cost_center": "Main - RPL"
         })
