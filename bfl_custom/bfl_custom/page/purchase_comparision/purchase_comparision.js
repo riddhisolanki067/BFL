@@ -126,7 +126,7 @@ function render_html(data) {
         <tr>
             <td>${i + 1}</td>
             <td>${data.pi.name}</td>
-            <td>${data.pi.posting_date}</td>
+            <td>${frappe.datetime.str_to_user(data.pi.posting_date)}</td>
             <td>${d.item_name}</td>
             <td>${d.uom}</td>
             <td>${d.qty}</td>
@@ -173,7 +173,7 @@ function render_html(data) {
                 <td>${r.supplier}</td>
                 <td>${r.bill_no}</td>
                 <td>${r.name}</td>
-                <td>${r.posting_date}</td>
+                <td>${frappe.datetime.str_to_user(r.posting_date)}</td>
                 <td>${r.item_name}</td>
                 <td>${r.uom}</td>
                 <td>${r.qty}</td>
