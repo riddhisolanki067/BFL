@@ -21,6 +21,7 @@
   "posting_date",
   "created_by",
   "approved_by",
+  "docchallan_number",
   "section_break_jezx",
   "item",
   "section_break_rbpe",
@@ -108,15 +109,13 @@
   },
   {
    "fieldname": "created_by",
-   "fieldtype": "Link",
-   "label": "CREATED BY",
-   "options": "Employee"
+   "fieldtype": "Data",
+   "label": "CREATED BY"
   },
   {
    "fieldname": "approved_by",
-   "fieldtype": "Link",
-   "label": "APPROVED BY",
-   "options": "Employee"
+   "fieldtype": "Data",
+   "label": "APPROVED BY"
   },
   {
    "fieldname": "section_break_jezx",
@@ -153,13 +152,18 @@
    "label": "Purchase Invoice",
    "options": "Purchase Invoice",
    "read_only": 1
+  },
+  {
+   "fieldname": "docchallan_number",
+   "fieldtype": "Data",
+   "label": "Doc/Challan Number "
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-02-04 14:04:27.658179",
+ "modified": "2026-02-05 13:24:32.511174",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "GATE ENTRY",
