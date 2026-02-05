@@ -141,7 +141,7 @@ doc_events = {
 	"GATE ENTRY": {
 		"after_insert": "bfl_custom.bfl_custom.doctype.gate_entry.gate_entry.update_attachment_flag",
         "on_update": "bfl_custom.bfl_custom.doctype.gate_entry.gate_entry.update_attachment_flag"
-	}
+	},
 	"Payment Entry": {
 		"before_save": "bfl_custom.py.payment_entry.payment_discount"
 		
