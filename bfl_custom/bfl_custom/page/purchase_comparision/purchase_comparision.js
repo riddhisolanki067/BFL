@@ -157,10 +157,11 @@ function render_html(data) {
             <th>ACCEPT QTY</th>
             <th>REJECTED QTY</th>
             <th>RATE</th>
+            <th>Amount</th>
             <th>Status</th>
             <th>Remarks</th>
 
-            <th>Amount</th>
+           
            
         </tr>
     `;
