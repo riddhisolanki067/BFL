@@ -94,6 +94,9 @@ function render_html(data) {
             <td><b>Payment Terms</b></td><td>-</td>
             <td><b>Supplier Invoice Date</b></td><td>${data.pi.bill_date}</td>
         </tr>
+        <tr>
+            <td><b>Contact Person Number</b></td><td>${data.pi.contact_number}</td>
+        </tr>
     </table>
 
     <!-- CURRENT -->
@@ -145,6 +148,7 @@ function render_html(data) {
         </tr>
         <tr>
             <th>SUPPLIER</th>
+            <th>SUPPLIER INVOICE</th>
             <th>INV NO</th>
             <th>DATE</th>
             <th>Item Name</th>
@@ -153,6 +157,8 @@ function render_html(data) {
             <th>ACCEPT QTY</th>
             <th>REJECTED QTY</th>
             <th>RATE</th>
+            <th>Status</th>
+            <th>Remarks</th>
 
             <th>Amount</th>
            
@@ -165,6 +171,7 @@ function render_html(data) {
             html += `
             <tr>
                 <td>${r.supplier}</td>
+                <td>${r.bill_no}</td>
                 <td>${r.name}</td>
                 <td>${r.posting_date}</td>
                 <td>${r.item_name}</td>
@@ -174,6 +181,8 @@ function render_html(data) {
                 <td>${r.rejected_qty}</td>
                 <td>${r.rate}</td>
                 <td>${amount}</td>
+                <td>${r.status}</td>
+                <td>${r.remarks}</td>
                 
             </tr>`;
         });
@@ -184,7 +193,7 @@ function render_html(data) {
 
     <table class="no-border">
         <tr>
-            <td><b>REMARK:${data.pi.remarks} </b></td>
+            <td><b>INVOICE REMARK:${data.pi.remarks} </b></td>
         </tr>
         <tr><td style="height:40px;"></td></tr>
     </table>

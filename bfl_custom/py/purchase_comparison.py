@@ -26,6 +26,8 @@ def get_data(pi):
                 pi.posting_date,
                 pi.bill_no,
                 pi.bill_date,
+                pi.remarks,
+                pi.status,
                 pii.item_name,
                 pii.qty,
                 pii.rate,
@@ -51,6 +53,7 @@ def get_data(pi):
             "place_of_supply":pi_doc.place_of_supply,
             "supplier_gstin":pi_doc.supplier_gstin,
             "remarks":pi_doc.remarks,
+            "contact_number":pi_doc.contact_mobile
             
         },
         "current_items": current_items,
