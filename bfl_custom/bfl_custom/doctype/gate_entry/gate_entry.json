@@ -23,6 +23,8 @@
   "approved_by",
   "docchallan_number",
   "had_attachments",
+  "gate_pass_number",
+  "remarks",
   "section_break_jezx",
   "item",
   "section_break_rbpe",
@@ -164,13 +166,23 @@
    "fieldname": "had_attachments",
    "fieldtype": "Check",
    "label": "Has attachments"
+  },
+  {
+   "fieldname": "gate_pass_number",
+   "fieldtype": "Data",
+   "label": "Gate Pass Number"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-02-05 14:56:22.705752",
+ "modified": "2026-02-17 18:43:19.806824",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "GATE ENTRY",

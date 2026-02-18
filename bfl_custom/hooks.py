@@ -43,7 +43,12 @@ app_include_js = "/assets/bfl_custom/js/bfl_desk.js"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"Purchase Invoice" : "public/js/purchase_invoice.js"}
+doctype_js = {"Purchase Invoice" : "public/js/purchase_invoice.js",
+			  "Sales Order"      :"public/js/So_images.js",
+			  "Quotation"        :"public/js/quotation_images.js"
+			 }
+				
+			 
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
