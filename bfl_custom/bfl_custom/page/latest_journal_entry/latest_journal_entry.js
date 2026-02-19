@@ -4,32 +4,30 @@ frappe.pages['latest_journal_entry'].on_page_load = function(wrapper) {
 		title: 'None',
 		single_column: true
 	});
-	 let account = page.add_field({
+	
+	let account = page.add_field({
         label: 'Account',
         fieldtype: 'Link',
         fieldname: 'account',
         options: 'Account',
-        change() {
-            load_data();
-        }
+        reqd: 1
     });
 
     let from_date = page.add_field({
         label: 'From Date',
         fieldtype: 'Date',
         fieldname: 'from_date',
-        change() {
-            load_data();
-        }
+        reqd: 1
     });
 
-    // Table container
+    page.add_inner_button('Load', () => load_data());
+
     let $table = $('<div class="mt-4"></div>').appendTo(page.body);
 
     function load_data() {
 
         frappe.call({
-            method: 'bfl_custom.bfl_custom.page.latest_journal_entry.latest_journal_entry.get_latest_journal_entries',
+            method: 'your_app.your_app.page.latest_journal_entry.latest_journal_entry.get_latest_journal_entries',
             args: {
                 account: account.get_value(),
                 from_date: from_date.get_value()
@@ -43,7 +41,9 @@ frappe.pages['latest_journal_entry'].on_page_load = function(wrapper) {
         });
     }
 
-    function render_table(data) {
+    function render_table(res) {
+
+        let data = res.rows;
 
         let html = `
             <table class="table table-bordered">
@@ -58,6 +58,7 @@ frappe.pages['latest_journal_entry'].on_page_load = function(wrapper) {
                         <th>Payment Type</th>
                         <th>Debit</th>
                         <th>Credit</th>
+                        <th>Running Balance</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -67,11 +68,7 @@ frappe.pages['latest_journal_entry'].on_page_load = function(wrapper) {
 
             html += `
                 <tr>
-                    <td>
-                        <a href="/app/journal-entry/${row.voucher}">
-                            ${row.voucher}
-                        </a>
-                    </td>
+                    <td>${row.voucher}</td>
                     <td>${row.posting_date || ''}</td>
                     <td>${row.cash_account || ''}</td>
                     <td>${row.counter_details || ''}</td>
@@ -80,15 +77,23 @@ frappe.pages['latest_journal_entry'].on_page_load = function(wrapper) {
                     <td>${row.custom_payment_type || ''}</td>
                     <td>${row.debit || 0}</td>
                     <td>${row.credit || 0}</td>
+                    <td>${row.running_balance || 0}</td>
                 </tr>
             `;
         });
+
+        // ⭐ TOTAL ROW
+        html += `
+            <tr style="font-weight:bold; background:#f5f5f5;">
+                <td colspan="7" style="text-align:right;">TOTAL</td>
+                <td>${res.total_debit}</td>
+                <td>${res.total_credit}</td>
+                <td></td>
+            </tr>
+        `;
 
         html += `</tbody></table>`;
 
         $table.html(html);
     }
-
-    // Initial load
-    load_data();
-}
+};
