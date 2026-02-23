@@ -17,6 +17,30 @@ frappe.ui.form.on("GATE ENTRY", {
                 },
                 __("Create")
             );
-        }
-    
+        },
+    before_save(frm) {
+
+        if (!frm.doc.supplier) return;
+
+        return frappe.call({
+            method: "bfl_custom.bfl_custom.doctype.gate_entry.gate_entry.validate_pending_po_qty",
+            args: {
+                doc: frm.doc
+            },
+            callback(r) {
+                if (r.message && r.message.length) {
+
+                    let message = r.message.join("<br>");
+
+                    return new Promise((resolve, reject) => {
+                        frappe.confirm(
+                            `Following items exceed pending PO quantity:<br><br>${message}<br><br>Do you want to ignore and continue?`,
+                            () => resolve(),     // Ignore → Save
+                            () => reject()      // Cancel Save
+                        );
+                    });
+                }
+            }
+        })
+    }
 }); 

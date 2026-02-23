@@ -12,6 +12,50 @@ class GATEENTRY(Document):
 import frappe
 from frappe.model.mapper import get_mapped_doc
 
+
+
+@frappe.whitelist()
+def validate_pending_po_qty(doc):
+    doc = frappe.parse_json(doc)
+
+    supplier = doc.get("supplier")
+    items = doc.get("item", [])   # your child table is named "item"
+
+    if not supplier:
+        return []
+
+    po_data = frappe.db.sql("""
+        SELECT
+            poi.item_code,
+            SUM(poi.qty - IFNULL(poi.received_qty, 0)) AS pending_qty
+        FROM `tabPurchase Order` po
+        JOIN `tabPurchase Order Item` poi ON poi.parent = po.name
+        WHERE
+            po.docstatus = 1
+            AND po.supplier = %s
+            AND (poi.qty - IFNULL(poi.received_qty, 0)) > 0
+        GROUP BY poi.item_code
+    """, supplier, as_dict=True)
+
+    pending_qty_map = {
+        row.item_code: row.pending_qty
+        for row in po_data
+    }
+
+    exceeded_items = []
+
+    for row in items:
+        item_code = row.get("product")  # your field is "product"
+        qty = row.get("qty", 0)
+
+        pending_qty = pending_qty_map.get(item_code, 0)
+
+        if qty > pending_qty:
+            exceeded_items.append(
+                f"{item_code} → Gate Qty: {qty}, PO Pending: {pending_qty}"
+            )
+
+    return exceeded_items
 @frappe.whitelist()
 def make_purchase_invoice(gate_entry):
     gate_entry_doc = frappe.get_doc("GATE ENTRY", gate_entry)
@@ -63,3 +107,5 @@ def update_attachment_flag(doc, method):
         "had_attachments",
         1 if attachments else 0
     )
+
+    
