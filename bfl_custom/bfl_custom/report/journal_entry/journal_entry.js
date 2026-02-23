@@ -74,17 +74,24 @@ frappe.query_reports["Journal Entry"] = {
 
     after_datatable_render: function(datatable_obj) {
 
-        // remove old bindings
-        $(document).off("click", ".print-je");
+        let wrapper = frappe.query_report.$report;
 
-        // attach click
-        $(document).on("click", ".print-je", function(e) {
+        // remove old bindings
+        wrapper.off("click", ".print-je");
+
+        // bind click inside report only
+        wrapper.on("click", ".print-je", function(e) {
 
             e.preventDefault();
             e.stopPropagation();
 
-            let name = $(this).data("name");
-            if (!name) return;
+            let name = $(this).attr("data-name");
+            if (!name) {
+                console.log("No name found");
+                return;
+            }
+
+            console.log("Printing:", name);
 
             let url = `/api/method/frappe.utils.print_format.download_pdf?` +
                 `doctype=Journal Entry&name=${name}&format=Standard&no_letterhead=0`;
