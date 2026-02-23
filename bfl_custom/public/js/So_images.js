@@ -31,3 +31,30 @@ frappe.ui.form.on("Packing Material", {
         });
     }
 });
+frappe.ui.form.on("Sales Order", {
+    refresh: function(frm) {
+        if (!frm.is_new()) {
+
+            frm.add_custom_button("Packing Purchase Order", function() {
+
+                frappe.new_doc("Purchase Order", {}, function(po) {
+
+                    po.company = frm.doc.company;
+                    po.items = [];
+                    // Loop Packing Material child table
+                    frm.doc.custom_packing_materials.forEach(function(row) {
+
+                        let child = frappe.model.add_child(po, "Purchase Order Item", "items");
+
+                        child.item_code = row.item;
+                        child.qty = row.qty;
+                        child.rate = row.rate;
+                       
+                    });
+
+                });
+
+            }, "Create");
+        }
+    }
+});
