@@ -10,12 +10,14 @@ frappe.query_reports["Journal Entry"] = {
         {
             fieldname: "from_date",
             label: "From Date",
-            fieldtype: "Date"
+            fieldtype: "Date",
+            reqd: 1
         },
         {
             fieldname: "to_date",
             label: "To Date",
-            fieldtype: "Date"
+            fieldtype: "Date",
+            reqd: 1
         },
         {
             fieldname: "year",
@@ -33,6 +35,7 @@ frappe.query_reports["Journal Entry"] = {
                 "July","August","September","October","November","December"
             ],
             on_change: function() {
+                console.log("this is working")
 
                 let month = frappe.query_report.get_filter_value("month");
                 let year = frappe.query_report.get_filter_value("year");
@@ -55,9 +58,7 @@ frappe.query_reports["Journal Entry"] = {
                     "to_date",
                     frappe.datetime.obj_to_str(lastDay)
                 );
-            },
-             onload: function() {
-
+                console.log("Button Clicked")
                 $(document).on("click", ".print-je", function() {
                     console.log("Button Clicked")
                     let name = $(this).data("name");
@@ -68,37 +69,10 @@ frappe.query_reports["Journal Entry"] = {
 
                     window.open(url);
                 });
+            },
+             
 
-    },
-
-
-    after_datatable_render: function(datatable_obj) {
-
-        let wrapper = frappe.query_report.$report;
-
-        // remove old bindings
-        wrapper.off("click", ".print-je");
-
-        // bind click inside report only
-        wrapper.on("click", ".print-je", function(e) {
-
-            e.preventDefault();
-            e.stopPropagation();
-
-            let name = $(this).attr("data-name");
-            if (!name) {
-                console.log("No name found");
-                return;
-            }
-
-            console.log("Printing:", name);
-
-            let url = `/api/method/frappe.utils.print_format.download_pdf?` +
-                `doctype=Journal Entry&name=${name}&format=Standard&no_letterhead=0`;
-
-            window.open(url, "_blank");
-        });
-    }
+  
 
         }
     ]
