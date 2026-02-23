@@ -1,13 +1,15 @@
-frappe.ui.form.on("Sales Order Item", {
-    item_code: function(frm, cdt, cdn) {
+frappe.ui.form.on("Packing Material", {
+    item: function(frm, cdt, cdn) {
+        console.log("working..")
+
         let row = locals[cdt][cdn];
-        if (!row.item_code) return;
+        if (!row.item) return;
 
         frappe.call({
             method: "frappe.client.get",
             args: {
                 doctype: "Item",
-                name: row.item_code
+                name: row.item
             },
             callback: function(r) {
                 if (!r.message) return;
@@ -21,7 +23,7 @@ frappe.ui.form.on("Sales Order Item", {
                     frappe.model.set_value(
                         cdt,
                         cdn,
-                        "custom_image_file",
+                        "image",
                         images[0].image
                     );
                 }
