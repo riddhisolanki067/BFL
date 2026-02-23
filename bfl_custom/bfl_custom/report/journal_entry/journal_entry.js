@@ -55,7 +55,22 @@ frappe.query_reports["Journal Entry"] = {
                     "to_date",
                     frappe.datetime.obj_to_str(lastDay)
                 );
-            }
+            },
+             onload: function(report) {
+
+                $(document).on("click", ".print-je", function() {
+
+                    let name = $(this).data("name");
+                    if (!name) return;
+
+                    let url = `/api/method/frappe.utils.print_format.download_pdf?` +
+                        `doctype=Journal Entry&name=${name}&format=Standard&no_letterhead=0`;
+
+                    window.open(url);
+                });
+
+    }
         }
     ]
 };
+
