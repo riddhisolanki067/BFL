@@ -59,7 +59,7 @@ frappe.query_reports["Journal Entry"] = {
              onload: function() {
 
                 $(document).on("click", ".print-je", function() {
-
+                    console.log("Button Clicked")
                     let name = $(this).data("name");
                     if (!name) return;
 
