@@ -56,7 +56,7 @@ frappe.query_reports["Journal Entry"] = {
                     frappe.datetime.obj_to_str(lastDay)
                 );
             },
-             onload: function(report) {
+             onload: function() {
 
                 $(document).on("click", ".print-je", function() {
 
