@@ -18,21 +18,21 @@ def execute(filters=None):
     ]
 
     data = frappe.db.sql("""
-        SELECT
-            child.item AS item,
-            parent.batch AS batch_count,
-            parent.batch_size AS batch_size,
-            SUM(child.opening) AS opening,
-            SUM(child.loan) AS loan,
-            SUM(child.purchase) AS purchase,
-            SUM(child.closing) AS closing,
-            SUM(child.consumption) AS consumption
-        FROM `tabRm Consumpation Item` child
-        JOIN `tabRM Consumpation` parent
-            ON parent.name = child.parent
-        WHERE parent.date BETWEEN %s AND %s
-        GROUP BY child.item
-        ORDER BY child.item
+    SELECT
+        child.item AS item,
+        parent.batch AS batch_count,
+        parent.batch_size AS batch_size,
+        SUM(child.opening) AS opening,
+        SUM(child.loan) AS loan,
+        SUM(child.purchase) AS purchase,
+        SUM(child.closing) AS closing,
+        SUM(child.consumption) AS consumption
+    FROM `tabRm Consumpation Item` child
+    JOIN `tabRM Consumpation` parent
+        ON parent.name = child.parent
+    WHERE parent.date BETWEEN %s AND %s
+    GROUP BY child.item, parent.batch, parent.batch_size
+    ORDER BY child.item
     """, (from_date, to_date), as_dict=1)
 
     total = {
