@@ -27,7 +27,7 @@ def execute(filters=None):
 			SUM(child.purchase) AS purchase,
 			SUM(child.closing) AS closing,
 			SUM(child.consumption) AS consumption
-		FROM `tabRM Consumpation Item` child
+		FROM `tabRm Consumpation Item` child
 		JOIN `tabRM Consumpation` parent
 			ON parent.name = child.parent
 		WHERE parent.date BETWEEN %s AND %s
