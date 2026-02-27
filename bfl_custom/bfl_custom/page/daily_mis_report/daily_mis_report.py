@@ -2,7 +2,7 @@ import frappe
 from frappe.utils import today
 
 @frappe.whitelist()
-def get_daily_mis():
+def get_daily_mis(from_date=None, to_date=None):
     today_date = today()
 
     # Purchase Invoice
@@ -20,8 +20,8 @@ def get_daily_mis():
         JOIN `tabPurchase Invoice Item` pii 
             ON pi.name = pii.parent
        
-        AND DATE(pi.creation) = CURDATE()
-    """,as_dict=1)
+        AND DATE(pi.creation) BETWEEN %s AND %s
+    """,(from_date, to_date), as_dict=1)
 
     # Sales Invoice
     sales = frappe.db.sql("""
@@ -38,8 +38,8 @@ def get_daily_mis():
         JOIN `tabSales Invoice Item` sii 
             ON si.name = sii.parent
         
-        AND DATE(si.creation) = CURDATE()
-    """, as_dict=1)
+     AND DATE(si.creation) BETWEEN %s AND %s
+    """,(from_date, to_date), as_dict=1)
 
     # Gate Entry (replace doctype if custom)
     gate = frappe.db.sql("""
@@ -55,8 +55,8 @@ def get_daily_mis():
         JOIN `tabGATE ENTRY ITEM` gi
             ON ge.name = gi.parent
        
-         AND DATE(ge.creation) = CURDATE()
-    """, as_dict=1)
+        AND DATE(gi.creation) BETWEEN %s AND %s
+    """,(from_date, to_date), as_dict=1)
 
     return {
         "purchase": purchase,

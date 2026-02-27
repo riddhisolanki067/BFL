@@ -1,0 +1,79 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-02-27 19:11:54.565348",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "item",
+  "closing",
+  "opening",
+  "column_break_osra",
+  "consumption",
+  "purchase",
+  "loan"
+ ],
+ "fields": [
+  {
+   "columns": 3,
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item",
+   "options": "Item",
+   "width": "3"
+  },
+  {
+   "columns": 3,
+   "fieldname": "closing",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Closing ",
+   "width": "3"
+  },
+  {
+   "fieldname": "opening",
+   "fieldtype": "Float",
+   "label": "Opening"
+  },
+  {
+   "fieldname": "purchase",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Purchase"
+  },
+  {
+   "fieldname": "loan",
+   "fieldtype": "Float",
+   "label": "Loan"
+  },
+  {
+   "fieldname": "column_break_osra",
+   "fieldtype": "Column Break"
+  },
+  {
+   "columns": 3,
+   "fieldname": "consumption",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Consumption",
+   "width": "3"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-02-27 21:53:52.716661",
+ "modified_by": "Administrator",
+ "module": "Bfl Custom",
+ "name": "Rm Consumpation Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
