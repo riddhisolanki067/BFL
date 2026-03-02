@@ -14,40 +14,59 @@ frappe.ui.form.on("RM Consumpation", {
         }
     },
     
-   
     onload(frm) {
 
         if (frm.is_new() && (!frm.doc.items || frm.doc.items.length === 0)) {
 
+            // STEP 1: Get child item groups of Raw Material
             frappe.call({
                 method: "frappe.client.get_list",
                 args: {
-                    doctype: "Item",
-                    filters: [
-                        ["Item Group", "parent_item_group", "=", "Raw Material"],
-                        ["Item", "disabled", "=", 0],
-                        ["Item", "is_stock_item", "=", 1]
-                    ],
+                    doctype: "Item Group",
+                    filters: {
+                        parent_item_group: "Raw Material"
+                    },
                     fields: ["name"],
                     limit_page_length: 1000
                 },
-                callback: function(r) {
-                    if (r.message) {
+                callback: function(res) {
 
-                        r.message.forEach(function(d) {
-                            let row = frm.add_child("items");
-                            row.item = d.name;
-                        });
+                    if (!res.message || res.message.length === 0) return;
 
-                        frm.refresh_field("items");
-                    }
+                    let groups = res.message.map(d => d.name);
+
+                    // STEP 2: Get Items under those groups
+                    frappe.call({
+                        method: "frappe.client.get_list",
+                        args: {
+                            doctype: "Item",
+                            filters: [
+                                ["item_group", "in", groups],
+                                ["disabled", "=", 0],
+                                ["is_stock_item", "=", 1]
+                            ],
+                            fields: ["name"],
+                            limit_page_length: 1000,
+                            order_by: "name asc"
+                        },
+                        callback: function(r) {
+
+                            if (r.message) {
+
+                                r.message.forEach(function(d) {
+                                    let row = frm.add_child("items");
+                                    row.item = d.name;
+                                });
+
+                                frm.refresh_field("items");
+                            }
+                        }
+                    });
+
                 }
             });
-
         }
     }
-
-
 });
 
 frappe.ui.form.on("RM Consumpation", {
