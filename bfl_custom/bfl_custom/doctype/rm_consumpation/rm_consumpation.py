@@ -31,7 +31,7 @@ class RMConsumpation(Document):
 				ON pr.name = pri.parent
 				WHERE pri.item_code = %s AND pr.custom_gate_entry IS NOT NULL 
 				AND pr.custom_gate_entry != ''
-				AND pr.transaction_date = %s
+				AND pr.posting_date = %s
 			""", (row.item, self.date))
 
 			row.purchase = purchase_qty[0][0] or 0
