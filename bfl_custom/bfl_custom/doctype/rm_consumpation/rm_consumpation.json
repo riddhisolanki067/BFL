@@ -6,10 +6,8 @@
  "engine": "InnoDB",
  "field_order": [
   "date",
-  "batch",
   "column_break_qzip",
   "day",
-  "batch_size",
   "section_break_qpkq",
   "items"
  ],
@@ -20,11 +18,6 @@
    "label": "Date"
   },
   {
-   "fieldname": "batch",
-   "fieldtype": "Data",
-   "label": "Batch"
-  },
-  {
    "fieldname": "column_break_qzip",
    "fieldtype": "Column Break"
   },
@@ -32,12 +25,7 @@
    "fieldname": "day",
    "fieldtype": "Select",
    "label": "Day",
-   "options": "Monday\nTuesday"
-  },
-  {
-   "fieldname": "batch_size",
-   "fieldtype": "Data",
-   "label": "Batch Size"
+   "options": "Monday\nTuesday\nWednesday\nThursday\nFriday\nSaturday\nSunday"
   },
   {
    "fieldname": "section_break_qpkq",
@@ -54,7 +42,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-27 21:46:14.514405",
+ "modified": "2026-03-02 11:25:03.681770",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "RM Consumpation",
