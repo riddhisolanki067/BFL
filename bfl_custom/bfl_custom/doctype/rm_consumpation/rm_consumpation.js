@@ -12,7 +12,41 @@ frappe.ui.form.on("RM Consumpation", {
                 };
             };
         }
+    },
+    
+    onload(frm) {
+
+        // Only add items if new document and table is empty
+        if (frm.is_new() && (!frm.doc.items || frm.doc.items.length === 0)) {
+
+            frappe.call({
+                method: "frappe.client.get_list",
+                args: {
+                    doctype: "Item",
+                    filters: {
+                        item_group: "Raw Material",
+                        disabled: 0,
+                        is_stock_item: 1
+                    },
+                    fields: ["name"],
+                    limit_page_length: 1000
+                },
+                callback: function(r) {
+                    if (r.message) {
+
+                        r.message.forEach(function(d) {
+                            let row = frm.add_child("items");
+                            row.item = d.name;
+                        });
+
+                        frm.refresh_field("items");
+                    }
+                }
+            });
+
+        }
     }
+
 });
 
 frappe.ui.form.on("RM Consumpation", {

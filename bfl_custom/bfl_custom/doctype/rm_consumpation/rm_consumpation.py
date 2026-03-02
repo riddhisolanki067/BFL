@@ -26,10 +26,11 @@ class RMConsumpation(Document):
 			# 2️⃣ Get Purchase Qty (from Purchase Receipt)
 			purchase_qty = frappe.db.sql("""
 				SELECT SUM(pri.qty)
-				FROM `tabPurchase Order Item` pri
-				JOIN `tabPurchase Order` pr
+				FROM `tabPurchase Invoice Item` pri
+				JOIN `tabPurchase Invoice` pr
 				ON pr.name = pri.parent
-				WHERE pri.item_code = %s
+				WHERE pri.item_code = %s AND pr.custom_gate_entry IS NOT NULL 
+				AND pr.custom_gate_entry != ''
 				AND pr.transaction_date = %s
 			""", (row.item, self.date))
 
