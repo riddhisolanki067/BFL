@@ -14,20 +14,20 @@ frappe.ui.form.on("RM Consumpation", {
         }
     },
     
+   
     onload(frm) {
 
-        // Only add items if new document and table is empty
         if (frm.is_new() && (!frm.doc.items || frm.doc.items.length === 0)) {
 
             frappe.call({
                 method: "frappe.client.get_list",
                 args: {
                     doctype: "Item",
-                    filters: {
-                        item_group: "Raw Material",
-                        disabled: 0,
-                        is_stock_item: 1
-                    },
+                    filters: [
+                        ["Item Group", "parent_item_group", "=", "Raw Material"],
+                        ["Item", "disabled", "=", 0],
+                        ["Item", "is_stock_item", "=", 1]
+                    ],
                     fields: ["name"],
                     limit_page_length: 1000
                 },
@@ -46,6 +46,7 @@ frappe.ui.form.on("RM Consumpation", {
 
         }
     }
+
 
 });
 
