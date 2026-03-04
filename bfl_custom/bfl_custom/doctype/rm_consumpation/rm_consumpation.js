@@ -79,5 +79,27 @@ frappe.ui.form.on("RM Consumpation", {
         }
 
 
+    },
+
+
+ validate(frm) {
+        if (!frm.doc.date) return;
+
+        return frappe.call({
+            method: "frappe.client.get_list",
+            args: {
+                doctype: "RM Consumpation",
+                filters: {
+                    date: frm.doc.date,
+                    name: ["!=", frm.doc.name]  // exclude current doc while editing
+                },
+                fields: ["name"],
+                limit_page_length: 1
+            }
+        }).then(r => {
+            if (r.message && r.message.length > 0) {
+                frappe.throw("RM Consumpation already exists for this date.");
+            }
+        });
     }
 });
