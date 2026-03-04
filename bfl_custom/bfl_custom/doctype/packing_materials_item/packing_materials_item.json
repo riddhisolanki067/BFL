@@ -1,0 +1,71 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-04 22:24:25.574465",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "item",
+  "machine",
+  "contractor",
+  "box",
+  "sale_qty",
+  "closing"
+ ],
+ "fields": [
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "machine",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Machine",
+   "options": "Workstation"
+  },
+  {
+   "fieldname": "contractor",
+   "fieldtype": "Link",
+   "label": "Contractor",
+   "options": "Contractor"
+  },
+  {
+   "fieldname": "box",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Box"
+  },
+  {
+   "fieldname": "sale_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Sale Qty"
+  },
+  {
+   "fieldname": "closing",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Closing"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-03-04 23:11:40.539659",
+ "modified_by": "Administrator",
+ "module": "Bfl Custom",
+ "name": "Packing Materials Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
