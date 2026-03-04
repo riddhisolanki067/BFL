@@ -15,7 +15,9 @@
   {
    "fieldname": "date",
    "fieldtype": "Date",
-   "label": "Date"
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_qzip",
@@ -42,7 +44,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-02 11:25:03.681770",
+ "modified": "2026-03-04 17:18:20.930794",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "RM Consumpation",
