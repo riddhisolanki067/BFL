@@ -11,7 +11,9 @@
   "contractor",
   "box",
   "sale_qty",
-  "closing"
+  "closing",
+  "total",
+  "running_balance"
  ],
  "fields": [
   {
@@ -51,13 +53,25 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Closing"
+  },
+  {
+   "fieldname": "total",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Total"
+  },
+  {
+   "fieldname": "running_balance",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Running Balance"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-04 23:11:40.539659",
+ "modified": "2026-03-05 15:56:25.747271",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "Packing Materials Item",
