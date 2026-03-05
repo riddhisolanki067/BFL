@@ -9,11 +9,7 @@
   "item",
   "machine",
   "contractor",
-  "box",
-  "sale_qty",
-  "closing",
-  "total",
-  "running_balance"
+  "box"
  ],
  "fields": [
   {
@@ -41,37 +37,13 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Box"
-  },
-  {
-   "fieldname": "sale_qty",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Sale Qty"
-  },
-  {
-   "fieldname": "closing",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Closing"
-  },
-  {
-   "fieldname": "total",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Total"
-  },
-  {
-   "fieldname": "running_balance",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Running Balance"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-05 15:56:25.747271",
+ "modified": "2026-03-05 19:48:29.050167",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "Packing Production Item",
