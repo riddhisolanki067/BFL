@@ -22,16 +22,16 @@
   {
    "fieldname": "items",
    "fieldtype": "Table",
-   "options": "Packing Materials Item"
+   "options": "Packing Production Item"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-04 23:12:30.403646",
+ "modified": "2026-03-05 17:00:25.128522",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
- "name": "Packing Materials",
+ "name": "Packing Production",
  "owner": "Administrator",
  "permissions": [
   {

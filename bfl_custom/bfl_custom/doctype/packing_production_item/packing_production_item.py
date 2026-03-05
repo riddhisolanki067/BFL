@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class PackingMaterials(Document):
+class PackingProductionItem(Document):
 	pass
