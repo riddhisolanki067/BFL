@@ -150,6 +150,10 @@ doc_events = {
 	"Payment Entry": {
 		"before_save": "bfl_custom.py.payment_entry.payment_discount"
 		
+	},
+	"Sales Order": {
+		"before_save": "bfl_custom.py.sales_order.execute"
+		
 	}
 }
 
