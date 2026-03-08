@@ -66,6 +66,9 @@ frappe.ui.form.on("RM Consumpation", {
                 }
             });
         }
+    },
+    after_save(frm) {
+        frappe.new_doc("RM Consumpation");
     }
 });
 

@@ -1,11 +1,13 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "naming_series:",
  "creation": "2026-03-04 19:09:20.716247",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "date",
+  "naming_series",
   "section_break_jegw",
   "items"
  ],
@@ -23,15 +25,22 @@
    "fieldname": "items",
    "fieldtype": "Table",
    "options": "Packing Production Item"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "PM.-.YY.-.MM.-.DD.-.#####"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-05 17:00:25.128522",
- "modified_by": "Administrator",
+ "modified": "2026-03-08 23:33:15.621177",
+ "modified_by": "riddhisolanki067@gmail.com",
  "module": "Bfl Custom",
  "name": "Packing Production",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {

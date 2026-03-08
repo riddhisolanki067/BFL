@@ -1,11 +1,13 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "naming_series:",
  "creation": "2026-02-27 19:06:26.230585",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "date",
+  "naming_series",
   "column_break_qzip",
   "day",
   "section_break_qpkq",
@@ -39,15 +41,22 @@
    "fieldtype": "Table",
    "label": "Items",
    "options": "Rm Consumpation Item"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "RMC-.YY.-.MM.-.DD.-.#####"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-04 17:18:20.930794",
- "modified_by": "Administrator",
+ "modified": "2026-03-08 23:29:13.502093",
+ "modified_by": "riddhisolanki067@gmail.com",
  "module": "Bfl Custom",
  "name": "RM Consumpation",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
