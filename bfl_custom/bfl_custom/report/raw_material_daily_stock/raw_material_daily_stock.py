@@ -18,22 +18,58 @@ def execute(filters=None):
     ]
 
     data = frappe.db.sql("""
-    SELECT
-        child.item AS item,
-        parent.batch AS batch_count,
-        parent.batch_size AS batch_size,
-        SUM(child.opening) AS opening,
-        SUM(child.loan) AS loan,
-        SUM(child.purchase) AS purchase,
-        SUM(child.closing) AS closing,
-        SUM(child.consumption) AS consumption
-    FROM `tabRm Consumpation Item` child
-    JOIN `tabRM Consumpation` parent
-        ON parent.name = child.parent
-    WHERE parent.date BETWEEN %s AND %s
-    GROUP BY child.item, parent.batch, parent.batch_size
-    ORDER BY child.item
-    """, (from_date, to_date), as_dict=1)
+        SELECT
+            t.item,
+            t.batch_count,
+            t.batch_size,
+
+            -- Opening (previous day)
+            (
+                SELECT child2.closing
+                FROM `tabRm Consumpation Item` child2
+                JOIN `tabRM Consumpation` parent2
+                ON parent2.name = child2.parent
+                WHERE child2.item = t.item
+                AND parent2.date < %s
+                ORDER BY parent2.date DESC
+                LIMIT 1
+            ) AS opening,
+
+            SUM(t.loan) AS loan,
+            SUM(t.purchase) AS purchase,
+
+            -- Closing (last date)
+            (
+                SELECT child3.closing
+                FROM `tabRm Consumpation Item` child3
+                JOIN `tabRM Consumpation` parent3
+                ON parent3.name = child3.parent
+                WHERE child3.item = t.item
+                AND parent3.date <= %s
+                ORDER BY parent3.date DESC
+                LIMIT 1
+            ) AS closing,
+
+            SUM(t.consumption) AS consumption
+
+        FROM
+        (
+            SELECT
+                child.item,
+                parent.batch AS batch_count,
+                parent.batch_size,
+                child.loan,
+                child.purchase,
+                child.consumption
+            FROM `tabRm Consumpation Item` child
+            JOIN `tabRM Consumpation` parent
+            ON parent.name = child.parent
+            WHERE parent.date BETWEEN %s AND %s
+        ) t
+
+        GROUP BY t.item, t.batch_count, t.batch_size
+        ORDER BY t.item
+        """, (from_date, to_date, from_date, to_date), as_dict=1)
 
     total = {
         "item": "TOTAL",
