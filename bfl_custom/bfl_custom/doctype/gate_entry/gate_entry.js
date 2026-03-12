@@ -1,6 +1,7 @@
 frappe.ui.form.on("GATE ENTRY", {
     refresh:function(frm) {
        console.log("ass")
+       if(frm.doc.purpose !== "Loan IN" || frm.doc.purpose !== "Loan Return"){
             frm.add_custom_button(("Purchase Invoice"),
                 function() {
                     frappe.call({
@@ -16,7 +17,8 @@ frappe.ui.form.on("GATE ENTRY", {
                     });
                 },
                 __("Create")
-            );
+                        );
+                    }
         },
     before_save(frm) {
 

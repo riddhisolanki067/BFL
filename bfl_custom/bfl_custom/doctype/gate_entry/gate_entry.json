@@ -74,7 +74,7 @@
    "fieldname": "type",
    "fieldtype": "Select",
    "label": "TYPE",
-   "options": "\nOUT-RETURNABLE\nOUT-NON RETURNABLE\nTRANSFER\nRETURNABLE IN"
+   "options": "\nOUT-RETURNABLE\nOUT-NON RETURNABLE\nTRANSFER\nRETURNABLE IN\nNON RETURNABLE IN"
   },
   {
    "fieldname": "reference",
@@ -96,7 +96,7 @@
    "fieldname": "purpose",
    "fieldtype": "Select",
    "label": "PURPOSE",
-   "options": "MATERIAL REPAIRING\nLOAN GIVEN\nTRANSFER TO SOLIS\nSPARE PURCHASE\nRM PURCHASE"
+   "options": "MATERIAL REPAIRING\nLOAN GIVEN\nTRANSFER TO SOLIS\nSPARE PURCHASE\nRM PURCHASE\nLoan IN\nLoan Return"
   },
   {
    "fieldname": "gate_out_time",
@@ -180,7 +180,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-12 15:17:33.178580",
+ "modified": "2026-03-12 18:42:35.250464",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "GATE ENTRY",

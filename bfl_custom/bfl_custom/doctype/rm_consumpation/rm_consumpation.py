@@ -41,7 +41,7 @@ class RMConsumpation(Document):
 
 			# 3️⃣ Gate Entry Logic
 			gate_entries = frappe.db.sql("""
-				SELECT gei.qty, ge.entry_type
+				SELECT gei.qty, ge.entry_type, ge.purpose
 				FROM `tabGATE ENTRY ITEM` gei
 				JOIN `tabGATE ENTRY` ge
 				ON ge.name = gei.parent
@@ -53,9 +53,9 @@ class RMConsumpation(Document):
 			gate_loan = 0
 
 			for g in gate_entries:
-				if g.type == "OUT-RETURNABLE":
+				if g.type == "OUT" and g.purpose in ["LOAN IN", "LOAN Return"]:
 					gate_loan += g.qty or 0
-				if g.entry_type == "IN" or g.type == "OUT-NON RETURNABLE":
+				if g.entry_type == "IN" or g.type == "NON RETURNABLE IN":
 					gate_purchase += g.qty or 0
 
 			# 4️⃣ Final Purchase = PI Purchase + Gate Entry Purchase
