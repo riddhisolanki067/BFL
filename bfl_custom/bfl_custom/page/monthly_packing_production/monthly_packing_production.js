@@ -6,26 +6,67 @@ var page = frappe.ui.make_app_page({
     single_column: true
 });
 
-var filterContainer = $('<div class="row" style="margin-bottom:20px;"></div>').appendTo(page.body);
+// ================= FILTER BAR =================
+
+// ================= FILTER BAR =================
+
+var filterContainer = $(`
+<div class="row align-items-end" style="margin-bottom:20px; gap:10px;">
+</div>
+`).appendTo(page.body);
+
 
 // From Date
-var fromCol = $('<div class="col-md-3"></div>').appendTo(filterContainer);
-$('<label><b>From Date</b></label>').appendTo(fromCol);
-var fromDateInput = $(`<input type="date" class="form-control" value="${frappe.datetime.month_start()}">`).appendTo(fromCol);
+var fromCol = $(`
+<div class="col-md-3">
+    <label style="font-weight:600;">From Date</label>
+</div>
+`).appendTo(filterContainer);
+
+var fromDateInput = frappe.ui.form.make_control({
+    parent: fromCol,
+    df: {
+        fieldtype: "Date",
+        fieldname: "from_date",
+        default: frappe.datetime.month_start()
+    },
+    render_input: true
+});
+
 
 // To Date
-var toCol = $('<div class="col-md-3"></div>').appendTo(filterContainer);
-$('<label><b>To Date</b></label>').appendTo(toCol);
-var toDateInput = $(`<input type="date" class="form-control" value="${frappe.datetime.get_today()}">`).appendTo(toCol);
+var toCol = $(`
+<div class="col-md-3">
+    <label style="font-weight:600;">To Date</label>
+</div>
+`).appendTo(filterContainer);
 
-// Button
-var btnCol = $('<div class="col-md-2"></div>').appendTo(filterContainer);
-var fetchButton = $('<button class="btn btn-primary" style="margin-top:25px;">Fetch</button>').appendTo(btnCol);
-var printBtn = $('<button class="btn btn-success" style="margin-top:25px;margin-left:10px;">Print</button>').appendTo(btnCol);
+var toDateInput = frappe.ui.form.make_control({
+    parent: toCol,
+    df: {
+        fieldtype: "Date",
+        fieldname: "to_date",
+        default: frappe.datetime.get_today()
+    },
+    render_input: true
+});
 
-// Export Button
-var exportBtn = $('<button class="btn btn-info" style="margin-top:25px;margin-left:10px;">Export Excel</button>').appendTo(btnCol);
-// Data container
+
+// Buttons Column
+var btnCol = $(`
+<div class="col-md-4 d-flex align-items-end gap-10">
+</div>
+`).appendTo(filterContainer);
+
+
+// Fetch
+var fetchButton = $(`<button class="btn btn-primary" style="margin-left:20px; margin-bottom:15px">Fetch</button>`).appendTo(btnCol);
+
+// Print
+var printBtn = $(`<button class="btn btn-success" style="margin-left:20px; margin-bottom:15px;">Print</button>`).appendTo(btnCol);
+
+// Export
+// var exportBtn = $(`<button class="btn btn-info">Export Excel</button>`).appendTo(btnCol);
 var dataContainer = $('<div id="mis-data"></div>').appendTo(page.body);
 
 
@@ -33,8 +74,8 @@ var dataContainer = $('<div id="mis-data"></div>').appendTo(page.body);
 
 fetchButton.on("click", function () {
 
-let from_date = fromDateInput.val();
-let to_date = toDateInput.val();
+let from_date = fromDateInput.get_value();
+let to_date = toDateInput.get_value();
 
 if (!from_date || !to_date) {
     frappe.msgprint("Please select both dates");
@@ -81,31 +122,31 @@ win.print();
 
 // ================= EXPORT EXCEL =================
 
-exportBtn.on("click", function(){
+// exportBtn.on("click", function(){
 
-let table = document.querySelector("#mis-data table:last-of-type");
+// let table = document.querySelector("#mis-data table:last-of-type");
 
-if(!table){
-    frappe.msgprint("No data to export");
-    return;
-}
+// if(!table){
+//     frappe.msgprint("No data to export");
+//     return;
+// }
 
-let html = table.outerHTML;
+// let html = table.outerHTML;
 
-let url = 'data:application/vnd.ms-excel,' + encodeURIComponent(html);
+// let url = 'data:application/vnd.ms-excel,' + encodeURIComponent(html);
 
-let link = document.createElement("a");
+// let link = document.createElement("a");
 
-link.href = url;
-link.download = "Monthly_Packing_Register.xls";
+// link.href = url;
+// link.download = "Monthly_Packing_Register.xls";
 
-document.body.appendChild(link);
+// document.body.appendChild(link);
 
-link.click();
+// link.click();
 
-document.body.removeChild(link);
+// document.body.removeChild(link);
 
-});
+// });
 
 
 // ================= RENDER REPORT =================
@@ -207,6 +248,31 @@ font-size:14px;
 margin-bottom:5px;
 }
 
+@media print {
+
+* {
+-webkit-print-color-adjust: exact !important;
+print-color-adjust: exact !important;
+}
+
+.green{
+background:#b6ffb3 !important;
+}
+
+.red{
+background:#ffb3b3 !important;
+}
+
+.total{
+background:#d9d9d9 !important;
+}
+
+.machine_total{
+background:#f5f5f5 !important;
+}
+
+}
+
 </style>
 
 <div class="title">MONTHLY PACKING PRODUCTION REGISTER</div>
@@ -253,12 +319,13 @@ html+=`<th>${String(i).padStart(2,'0')}</th>`;
 }
 
 html+=`<th>Total</th>
-
+<th>Avg</th>
 </tr>`;
 
 let grand_total = 0;
 
 Object.values(pivot).forEach(row=>{
+let working_days = Object.values(row.days).filter(v => v > 0).length || 1;
 
 html+=`<tr>
 
@@ -285,7 +352,8 @@ html+=`<td class="${cls}">${v}</td>`;
 
 html+=`
 <td class="machine_total">${row.total}</td>
-<td>${Math.round(row.total/31)}</td>
+
+<td>${Math.round(row.total / working_days)}</td>
 </tr>`;
 
 grand_total += row.total;
