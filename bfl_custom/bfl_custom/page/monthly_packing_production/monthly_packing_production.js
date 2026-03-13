@@ -59,6 +59,51 @@ frappe.call({
 
 });
 
+printBtn.on("click", function () {
+
+let printContents = document.getElementById("mis-data").innerHTML;
+
+let win = window.open('', '', 'height=900,width=1200');
+
+win.document.write('<html><head><title>Production Register</title>');
+win.document.write('</head><body>');
+win.document.write(printContents);
+win.document.write('</body></html>');
+
+win.document.close();
+win.print();
+
+});
+
+
+// ================= EXPORT EXCEL =================
+
+exportBtn.on("click", function(){
+
+let table = document.querySelector("#mis-data table:last-of-type");
+
+if(!table){
+    frappe.msgprint("No data to export");
+    return;
+}
+
+let html = table.outerHTML;
+
+let url = 'data:application/vnd.ms-excel,' + encodeURIComponent(html);
+
+let link = document.createElement("a");
+
+link.href = url;
+link.download = "Monthly_Packing_Register.xls";
+
+document.body.appendChild(link);
+
+link.click();
+
+document.body.removeChild(link);
+
+});
+
 
 // ================= RENDER REPORT =================
 
