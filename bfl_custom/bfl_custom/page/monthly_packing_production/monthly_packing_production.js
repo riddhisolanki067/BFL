@@ -21,7 +21,10 @@ var toDateInput = $(`<input type="date" class="form-control" value="${frappe.dat
 // Button
 var btnCol = $('<div class="col-md-2"></div>').appendTo(filterContainer);
 var fetchButton = $('<button class="btn btn-primary" style="margin-top:25px;">Fetch</button>').appendTo(btnCol);
+var printBtn = $('<button class="btn btn-success" style="margin-top:25px;margin-left:10px;">Print</button>').appendTo(btnCol);
 
+// Export Button
+var exportBtn = $('<button class="btn btn-info" style="margin-top:25px;margin-left:10px;">Export Excel</button>').appendTo(btnCol);
 // Data container
 var dataContainer = $('<div id="mis-data"></div>').appendTo(page.body);
 
