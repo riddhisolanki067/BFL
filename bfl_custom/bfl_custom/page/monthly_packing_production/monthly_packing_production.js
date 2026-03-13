@@ -326,6 +326,7 @@ let grand_total = 0;
 
 Object.values(pivot).forEach(row=>{
 let working_days = Object.values(row.days).filter(v => v > 0).length || 1;
+console.log(working_days)
 
 html+=`<tr>
 
