@@ -155,6 +155,8 @@ function render_report(data){
 
 let summary = data.contractor_summary;
 let rows = data.data;
+let from_date = fromDateInput.get_value();
+let to_date = toDateInput.get_value();
 
 let days = 31;
 
@@ -276,6 +278,7 @@ background:#f5f5f5 !important;
 </style>
 
 <div class="title">MONTHLY PACKING PRODUCTION REGISTER</div>
+<div class="month">PERIOD : ${frappe.datetime.str_to_user(from_date)} TO ${frappe.datetime.str_to_user(to_date)}</div>
 
 <div class="summary_title">CONTRACTOR PRODUCTION SUMMARY</div>
 
@@ -312,6 +315,8 @@ html+=`<table>
 <tr>
 <th>Contractor</th>
 <th>Machine</th>
+<th>Company Worker</th>
+<th>Contractor Worker</th>
 <th>Item Print Name</th>`;
 
 for(let i=1;i<=31;i++){
@@ -324,7 +329,9 @@ html+=`<th>Total</th>
 
 let grand_total = 0;
 
-Object.values(pivot).forEach(row=>{
+Object.values(pivot)
+.sort((a,b)=>a.contractor.localeCompare(b.contractor))
+.forEach(row=>{
 let working_days = Object.values(row.days).filter(v => v > 0).length || 1;
 console.log(working_days)
 
@@ -332,6 +339,8 @@ html+=`<tr>
 
 <td>${row.contractor}</td>
 <td>${row.machine}</td>
+<td>${row.custom_company_worker}</td>
+<td>${row.custom_contractor_worker}</td>
 <td>${row.item}</td>`;
 
 for(let i=1;i<=31;i++){
@@ -340,10 +349,10 @@ let v = row.days[i] || 0;
 
 let cls="";
 
-if(v === highest[i] && v>0){
+if(v>600 && v>0){
 cls="green";
 }
-else if(v<400 && v>0){
+else if(v<600 && v>0){
 cls="red";
 }
 
