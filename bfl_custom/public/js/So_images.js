@@ -61,7 +61,7 @@ frappe.ui.form.on("Sales Order", {
         frm.set_query("item", "custom_packing_materials", function(doc, cdt, cdn) {
             return {
                 filters: [
-                    ["Item", "item_group", "in", ["WRAPPER"]]
+                    ["Item", "item_group", "in", ["WRAPPER","PACKING MATERIAL"]]
                 ]
             };
         });
