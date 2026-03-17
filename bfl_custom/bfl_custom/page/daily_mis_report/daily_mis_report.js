@@ -221,7 +221,9 @@ frappe.pages['daily-mis-report'].on_page_load = function(wrapper) {
             table += `
             <tr>
                 <td>${frappe.datetime.str_to_user(r.date)}</td>
-                <td>${r.voucher}</td>
+                <td><a href="/app/${frappe.router.slug(r.doctype)}/${r.voucher}" target="_blank">
+                 ${r.voucher}
+                </a></td>
                 <td>${r.party}</td>
                 <td>${r.item}</td>
                 <td>${r.qty}</td>
@@ -259,7 +261,9 @@ frappe.pages['daily-mis-report'].on_page_load = function(wrapper) {
             table += `
             <tr>
                 <td>${frappe.datetime.str_to_user(r.date)}</td>
-                <td>${r.voucher}</td>
+                <td><a href="/app/${frappe.router.slug(r.doctype)}/${r.voucher}" target="_blank">
+                    ${r.voucher}
+                </a></td>
                 <td>${r.party}</td>
                 <td>${r.product}</td>
                 <td>${r.qty}</td>

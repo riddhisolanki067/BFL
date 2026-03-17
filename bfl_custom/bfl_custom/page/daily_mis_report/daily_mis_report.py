@@ -10,6 +10,7 @@ def get_daily_mis(from_date=None, to_date=None):
         SELECT 
             pi.posting_date as date,
             pi.name as voucher,
+            'Purchase Invoice' as doctype,
             pi.supplier as party,
             pii.item_name as item,
             pii.qty,
@@ -20,7 +21,7 @@ def get_daily_mis(from_date=None, to_date=None):
         JOIN `tabPurchase Invoice Item` pii 
             ON pi.name = pii.parent
        
-        AND DATE(pi.creation) BETWEEN %s AND %s
+        WHERE DATE(pi.creation) BETWEEN %s AND %s
     """,(from_date, to_date), as_dict=1)
 
     # Sales Invoice
@@ -28,7 +29,8 @@ def get_daily_mis(from_date=None, to_date=None):
         SELECT 
             si.posting_date as date,
             si.name as voucher,
-            si.customer as party,
+            'Sales Invoice' as doctype,
+             si.customer as party,
             sii.item_name as item,
             sii.qty,
             sii.rate,
@@ -38,7 +40,7 @@ def get_daily_mis(from_date=None, to_date=None):
         JOIN `tabSales Invoice Item` sii 
             ON si.name = sii.parent
         
-     AND DATE(si.creation) BETWEEN %s AND %s
+     WHERE DATE(si.creation) BETWEEN %s AND %s
     """,(from_date, to_date), as_dict=1)
 
     # Gate Entry (replace doctype if custom)
@@ -46,6 +48,7 @@ def get_daily_mis(from_date=None, to_date=None):
         SELECT 
             ge.posting_date as date,
             ge.name as voucher,
+            'GATE ENTRY' as doctype,
             ge.supplier as party,
             gi.product,
             gi.qty,
@@ -55,7 +58,7 @@ def get_daily_mis(from_date=None, to_date=None):
         JOIN `tabGATE ENTRY ITEM` gi
             ON ge.name = gi.parent
        
-        AND DATE(gi.creation) BETWEEN %s AND %s
+        WHERE DATE(gi.creation) BETWEEN %s AND %s
     """,(from_date, to_date), as_dict=1)
 
     return {
