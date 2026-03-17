@@ -17,7 +17,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Item",
-   "link_filters": "[[\"Item\",\"item_group\",\"in\",[\"WRAPPER\",\"PACKING MATERIAL\"]]]",
+   "link_filters": "[]",
    "options": "Item"
   },
   {
@@ -43,7 +43,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-16 19:55:35.502449",
+ "modified": "2026-03-17 12:16:00.698264",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "Packing Material",
