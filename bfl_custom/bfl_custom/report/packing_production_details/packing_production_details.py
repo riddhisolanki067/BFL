@@ -6,6 +6,8 @@ def execute(filters=None):
     filters = filters or {}
 
     columns = [
+        {"label": "Name", "fieldname": "name", "fieldtype": "Link", "options": "Packing Production", "width": 110},
+
         {"label": "Date", "fieldname": "date", "fieldtype": "Date", "width": 110},
         {"label": "Item", "fieldname": "item", "fieldtype": "Link", "options": "Item", "width": 180},
         {"label": "Machine", "fieldname": "machine", "fieldtype": "Data", "width": 120},
@@ -25,6 +27,7 @@ def execute(filters=None):
     # ---------------- MAIN DATA ----------------
     data = frappe.db.sql(f"""
         SELECT
+            pp.name,
             pp.date,
             ppi.item,
             ppi.machine,
