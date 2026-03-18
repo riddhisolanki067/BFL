@@ -115,10 +115,14 @@ let to_date = toDateInput.get_value();
 
 let days = 31;
 let pivot = {};
-let day_total = {};
+let day_total_box = {};
+let day_total_cw = {};
+let day_total_ct = {};
 
 for(let i=1;i<=31;i++){
-    day_total[i]=0;
+    day_total_box[i]=0;
+    day_total_cw[i]=0;
+    day_total_ct[i]=0;
 }
 
 // -------- PIVOT BUILD --------
@@ -139,12 +143,14 @@ if(!pivot[key]){
 
 pivot[key].days[r.d] = {
     box: r.box || 0,
-    company_worker: r.company_worker || 0,
-    contractor_worker: r.contractor_worker || 0
+    company_worker: r.custom_company_worker || 0,
+    contractor_worker: r.custom_contractor_worker || 0
 };
 
 pivot[key].total += r.box || 0;
-day_total[r.d] += r.box || 0;
+day_total_box[r.d] += r.box || 0;
+day_total_cw[r.d] += r.company_worker || 0;
+day_total_ct[r.d] += r.contractor_worker || 0;
 
 });
 
@@ -195,6 +201,31 @@ font-weight:bold;
 font-size:14px;
 margin-bottom:5px;
 }
+
+@media print {
+
+* {
+-webkit-print-color-adjust: exact !important;
+print-color-adjust: exact !important;
+}
+
+.green{
+background:#b6ffb3 !important;
+}
+
+.red{
+background:#ffb3b3 !important;
+}
+
+.total{
+background:#d9d9d9 !important;
+}
+
+.machine_total{
+background:#f5f5f5 !important;
+}
+
+}
 </style>
 
 <div class="title">MONTHLY PACKING PRODUCTION REGISTER</div>
@@ -230,18 +261,26 @@ html+=`
 // -------- MAIN TABLE --------
 
 html+=`<table>
-<tr>
-<th>Contractor</th>
-<th>Machine</th>
-<th>Item</th>`;
+<th rowspan="2">Contractor</th>
+<th rowspan="2">Machine</th>
+<th rowspan="2">Item</th>`;
 
+// First header row (Dates)
 for(let i=1;i<=31;i++){
-html+=`<th>${String(i).padStart(2,'0')}</th>`;
+    html+=`<th colspan="3">${String(i).padStart(2,'0')}</th>`;
 }
 
-html+=`<th>Total</th>
-<th>Avg</th>
+html+=`<th rowspan="2">Total</th>
+<th rowspan="2">Avg</th>
 </tr>`;
+
+// Second header row (BOX / CW / CT)
+html+=`<tr>`;
+for(let i=1;i<=31;i++){
+    html+=`<th>Box</th>
+            <th>CW</th>
+            <th>CT</th>`;
+}
 
 let grand_total = 0;
 
@@ -257,21 +296,15 @@ html+=`<tr>
 <td>${row.item}</td>`;
 
 for(let i=1;i<=31;i++){
-
 let d = row.days[i] || {};
+
 let box = d.box || 0;
 let cw = d.company_worker || 0;
 let ct = d.contractor_worker || 0;
 
-let cls="";
-if(box>600) cls="green";
-else if(box>0) cls="red";
-
-html+=`<td class="${cls}">
-<div>${box}</div>
-<div>CW:${cw}</div>
-<div>CT:${ct}</div>
-</td>`;
+html+=`<td>${box}</td>
+<td>${cw}</td>
+<td>${ct}</td>`;
 }
 
 html+=`
@@ -289,7 +322,11 @@ html+=`<tr class="total">
 <td colspan="3">GRAND TOTAL</td>`;
 
 for(let i=1;i<=31;i++){
-html+=`<td>${day_total[i]}</td>`;
+    html+=`
+        <td>${day_total_box[i]}</td>
+        <td>${day_total_cw[i]}</td>
+        <td>${day_total_ct[i]}</td>
+    `;
 }
 
 html+=`<td>${grand_total}</td>
