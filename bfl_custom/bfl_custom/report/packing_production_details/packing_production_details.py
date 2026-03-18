@@ -14,6 +14,7 @@ def execute(filters=None):
         {"label": "Contractor", "fieldname": "contractor", "fieldtype": "Data", "width": 140},
         {"label": "Company Worker", "fieldname": "custom_company_worker", "fieldtype": "Data", "width": 110},
         {"label": "Contractor Worker", "fieldname": "custom_contractor_worker", "fieldtype": "Data", "width": 110},
+        {"label": "Working", "fieldname": "custom_working", "fieldtype": "Data", "width": 90},
         {"label": "Box", "fieldname": "box", "fieldtype": "Float", "width": 90},
         {"label": "Daily Total", "fieldname": "daily_total", "fieldtype": "Float", "width": 120},
         {"label": "Running Balance", "fieldname": "running_balance", "fieldtype": "Float", "width": 140},
@@ -36,8 +37,8 @@ def execute(filters=None):
             ppi.contractor,
             ppi.custom_company_worker,
             ppi.custom_contractor_worker,
-            ppi.box
-           
+            ppi.custom_working,
+            ppi.box       
         FROM
             `tabPacking Production Item` ppi
         JOIN
