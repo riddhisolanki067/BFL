@@ -1,11 +1,13 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "naming_series:",
  "creation": "2026-03-10 16:05:20.109992",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "date",
+  "naming_series",
   "section_break_akfk",
   "table_vlnw"
  ],
@@ -25,12 +27,18 @@
    "fieldname": "table_vlnw",
    "fieldtype": "Table",
    "options": "Mixing Production Item"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series ",
+   "options": "MP.-.YY.-.MM.-.DD.-.#####"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-10 16:22:55.290073",
+ "modified": "2026-03-18 19:54:25.681011",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "Mixing Production",
