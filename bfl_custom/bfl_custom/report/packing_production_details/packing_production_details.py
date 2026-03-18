@@ -34,9 +34,10 @@ def execute(filters=None):
             ppi.item,
             ppi.machine,
             ppi.contractor,
+            ppi.custom_company_worker,
+            ppi.custom_contractor_worker,
             ppi.box
-            ppi.custom_company_worker
-            ppi.custom_contractor_worker
+           
         FROM
             `tabPacking Production Item` ppi
         JOIN
