@@ -12,8 +12,9 @@ def execute(filters=None):
         {"label": "Item", "fieldname": "item", "fieldtype": "Link", "options": "Item", "width": 180},
         {"label": "Machine", "fieldname": "machine", "fieldtype": "Data", "width": 120},
         {"label": "Contractor", "fieldname": "contractor", "fieldtype": "Data", "width": 140},
-        {"label": "Company Worker", "fieldname": "custom_company_worker", "fieldtype": "Data", "width": 110},
         {"label": "Contractor Worker", "fieldname": "custom_contractor_worker", "fieldtype": "Data", "width": 110},
+        {"label": "Liner Worker", "fieldname": "custom_company_worker", "fieldtype": "Data", "width": 90},
+        {"label": "Ladi Worker", "fieldname": "custom_ladi_workier", "fieldtype": "Data", "width": 90},
         {"label": "Working", "fieldname": "custom_working", "fieldtype": "Data", "width": 90},
         {"label": "Box", "fieldname": "box", "fieldtype": "Float", "width": 90},
         {"label": "Daily Total", "fieldname": "daily_total", "fieldtype": "Float", "width": 120},
@@ -35,8 +36,9 @@ def execute(filters=None):
             ppi.item,
             ppi.machine,
             ppi.contractor,
-            ppi.custom_company_worker,
             ppi.custom_contractor_worker,
+            ppi.custom_company_worker,
+            ppi.custom_ladi_workier,
             ppi.custom_working,
             ppi.box       
         FROM
