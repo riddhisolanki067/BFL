@@ -6,7 +6,9 @@ def get_data(from_date, to_date):
     contractor_summary = frappe.db.sql("""
         SELECT
             ppi.contractor,
-            SUM(ppi.box) as total_box
+            SUM(ppi.box) as total_box,
+            SUM(ppi.custom_company_worker) as company_worker,
+            SUM(ppi.custom_contractor_worker) as contractor_worker
         FROM `tabPacking Production Item` ppi
         JOIN `tabPacking Production` pp
             ON pp.name = ppi.parent
@@ -25,7 +27,9 @@ def get_data(from_date, to_date):
             ppi.machine,
             COALESCE(i.custom_item_print_name,'None') as item_name,
             DAY(pp.date) as d,
-            SUM(ppi.box) as box
+            SUM(ppi.box) as box,
+            SUM(ppi.custom_company_worker) as company_worker,
+           SUM(ppi.custom_contractor_worker) as contractor_worker
         FROM `tabPacking Production Item` ppi
 
         JOIN `tabPacking Production` pp
