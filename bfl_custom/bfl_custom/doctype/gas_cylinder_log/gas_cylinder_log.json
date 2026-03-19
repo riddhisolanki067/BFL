@@ -1,0 +1,143 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-03-19 18:44:29.649696",
+ "default_view": "List",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "cylinder_in_section",
+  "naming_series",
+  "date",
+  "brand",
+  "gross_weight",
+  "column_break_dvhf",
+  "supplier",
+  "cylinder_number",
+  "tar_weight",
+  "net_weight",
+  "section_break_ckae",
+  "out_date",
+  "out_gross_weight",
+  "column_break_biyj",
+  "out_net_weight",
+  "gas_cosumed"
+ ],
+ "fields": [
+  {
+   "fieldname": "cylinder_in_section",
+   "fieldtype": "Section Break",
+   "label": "Cylinder In "
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier"
+  },
+  {
+   "fetch_from": "cylinder_number.brand",
+   "fieldname": "brand",
+   "fieldtype": "Link",
+   "label": "Brand",
+   "options": "Brand"
+  },
+  {
+   "fieldname": "gross_weight",
+   "fieldtype": "Float",
+   "label": "Gross Weight"
+  },
+  {
+   "fieldname": "tar_weight",
+   "fieldtype": "Float",
+   "label": "Tar Weight"
+  },
+  {
+   "fieldname": "net_weight",
+   "fieldtype": "Float",
+   "label": "Net Weight",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cylinder_number",
+   "fieldtype": "Link",
+   "label": "Cylinder Number",
+   "options": "Cylinder Master"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "CG.-.YY.-.MM.-.DD.-.#####"
+  },
+  {
+   "fieldname": "column_break_dvhf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_ckae",
+   "fieldtype": "Section Break",
+   "label": "Cylinder Out"
+  },
+  {
+   "fieldname": "out_gross_weight",
+   "fieldtype": "Float",
+   "label": "Gross Weight "
+  },
+  {
+   "fieldname": "out_net_weight",
+   "fieldtype": "Float",
+   "label": "Net Weight",
+   "read_only": 1
+  },
+  {
+   "fieldname": "gas_cosumed",
+   "fieldtype": "Float",
+   "label": "Gas Cosumed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_biyj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "out_date",
+   "fieldtype": "Date",
+   "label": "Date"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-03-19 20:07:21.736302",
+ "modified_by": "Administrator",
+ "module": "Bfl Custom",
+ "name": "Gas Cylinder Log",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
