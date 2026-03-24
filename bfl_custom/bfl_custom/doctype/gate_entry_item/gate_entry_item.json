@@ -11,7 +11,11 @@
   "no_of_package",
   "value",
   "description",
-  "image"
+  "image",
+  "cylinder_number",
+  "net_weight",
+  "tare_weight",
+  "gross_weight"
  ],
  "fields": [
   {
@@ -50,13 +54,34 @@
    "fieldtype": "Attach",
    "in_list_view": 1,
    "label": "IMAGE"
+  },
+  {
+   "fieldname": "cylinder_number",
+   "fieldtype": "Link",
+   "label": "Cylinder Number",
+   "options": "Cylinder Master"
+  },
+  {
+   "fieldname": "net_weight",
+   "fieldtype": "Float",
+   "label": "Net Weight"
+  },
+  {
+   "fieldname": "gross_weight",
+   "fieldtype": "Float",
+   "label": "Gross Weight"
+  },
+  {
+   "fieldname": "tare_weight",
+   "fieldtype": "Float",
+   "label": "Tare Weight"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-24 16:10:21.520081",
+ "modified": "2026-03-24 20:01:00.452908",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "GATE ENTRY ITEM",
