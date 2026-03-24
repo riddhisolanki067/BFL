@@ -100,7 +100,7 @@ def update_attachment_flag(doc, method):
         },
         limit=1
     )
-    print(attachments)
+    # print(attachments)
     frappe.db.set_value(
         "GATE ENTRY",
         doc.name,
