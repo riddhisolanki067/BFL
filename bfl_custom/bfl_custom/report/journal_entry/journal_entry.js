@@ -1,4 +1,29 @@
 frappe.query_reports["Journal Entry"] = {
+    onload: function() {
+
+        // Attach once
+        $(document).on("click", ".print-je", function() {
+            let name = $(this).data("name");
+            if (!name) return;
+
+            let url = `/api/method/frappe.utils.print_format.download_pdf?` +
+                `doctype=Journal Entry&name=${name}&format=Standard&no_letterhead=0`;
+
+            window.open(url);
+        });
+    },
+// formatter: function(value, row, column, data, default_formatter) {
+//     value = default_formatter(value, row, column, data);
+
+//     // ✅ Checkbox only for real vouchers
+//     if (
+//         column.fieldname === "select_row"
+      
+//     ) {
+//         return `<input type="checkbox" class="je-check" data-name="${data.voucher}">`;
+//     }
+//         return value;
+// },
     filters: [
         {
             fieldname: "account",
@@ -35,14 +60,11 @@ frappe.query_reports["Journal Entry"] = {
                 "July","August","September","October","November","December"
             ],
             on_change: function() {
-                console.log("this is working")
 
                 let month = frappe.query_report.get_filter_value("month");
                 let year = frappe.query_report.get_filter_value("year");
 
-                if (!month || !year) {
-                    return;
-                }
+                if (!month || !year) return;
 
                 let monthIndex = new Date(Date.parse(month +" 1, "+year)).getMonth();
 
@@ -58,23 +80,9 @@ frappe.query_reports["Journal Entry"] = {
                     "to_date",
                     frappe.datetime.obj_to_str(lastDay)
                 );
-                console.log("Button Clicked")
-                $(document).on("click", ".print-je", function() {
-                    console.log("Button Clicked")
-                    let name = $(this).data("name");
-                    if (!name) return;
-
-                    let url = `/api/method/frappe.utils.print_format.download_pdf?` +
-                        `doctype=Journal Entry&name=${name}&format=Standard&no_letterhead=0`;
-
-                    window.open(url);
-                });
             },
-             
-
-  
-
+            
+            
         }
     ]
 };
-

@@ -1,7 +1,77 @@
 {
  "add_total_row": 1,
  "add_translate_data": 0,
- "columns": [],
+ "columns": [
+  {
+   "fieldname": "print_col",
+   "fieldtype": "Fold",
+   "label": "print_col",
+   "width": 0
+  },
+  {
+   "fieldname": "voucher",
+   "fieldtype": "Link",
+   "label": "Voucher",
+   "options": "Journal Entry",
+   "width": 0
+  },
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "width": 0
+  },
+  {
+   "fieldname": "cash_account",
+   "fieldtype": "Link",
+   "label": "Cash Account",
+   "options": "Account",
+   "width": 0
+  },
+  {
+   "fieldname": "counter_details",
+   "fieldtype": "Data",
+   "label": "Counter Details",
+   "options": "",
+   "width": 0
+  },
+  {
+   "fieldname": "remark",
+   "fieldtype": "Data",
+   "label": "Remark",
+   "width": 0
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "label": "Status",
+   "width": 0
+  },
+  {
+   "fieldname": "payment_type",
+   "fieldtype": "Data",
+   "label": "Payment Type",
+   "width": 0
+  },
+  {
+   "fieldname": "debit",
+   "fieldtype": "Currency",
+   "label": "Debit",
+   "width": 0
+  },
+  {
+   "fieldname": "credit",
+   "fieldtype": "Currency",
+   "label": "Credit",
+   "width": 0
+  },
+  {
+   "fieldname": "running_balance",
+   "fieldtype": "Currency",
+   "label": "Running Balance",
+   "width": 0
+  }
+ ],
  "creation": "2026-02-18 21:06:38.685711",
  "disabled": 0,
  "docstatus": 0,
@@ -43,13 +113,13 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": null,
- "modified": "2026-02-24 15:03:02.874067",
+ "modified": "2026-03-25 17:57:37.110136",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "Journal Entry",
  "owner": "Administrator",
  "prepared_report": 0,
- "query": "WITH opening AS (\n    SELECT \n        COALESCE(\n            SUM(jea.debit_in_account_currency - jea.credit_in_account_currency), 0\n        ) AS opening_balance\n    FROM `tabJournal Entry Account` jea\n    JOIN `tabJournal Entry` je ON je.name = jea.parent\n    WHERE\n        jea.account = %(account)s\n        AND (\n            %(from_date)s IS NULL\n            OR je.posting_date < %(from_date)s\n        )\n),\n\nmain AS (\n    SELECT\n\n        CONCAT(\n            '<button class=\"btn btn-xs btn-primary print-je\" data-name=\"',\n            je.name,'\">\ud83d\udda8</button>') AS print_col,\n\n        je.name AS voucher,\n        je.posting_date AS posting_date,\n        cash_line.account AS cash_account,\n\n        GROUP_CONCAT(\n            CONCAT(\n                other_line.account,\n                IF(other_line.party IS NOT NULL, CONCAT(' (', other_line.party, ')'), ''),\n                ' D:', other_line.debit_in_account_currency,\n                ' C:', other_line.credit_in_account_currency\n            ) SEPARATOR '; '\n        ) AS counter_details,\n\n        je.remark AS remark,\n\n        CASE je.docstatus\n            WHEN 0 THEN 'Draft'\n            WHEN 1 THEN 'Submitted'\n            WHEN 2 THEN 'Cancelled'\n        END AS status,\n\n        je.custom_payment_type AS payment_type,\n\n        cash_line.debit_in_account_currency AS debit,\n        cash_line.credit_in_account_currency AS credit,\n\n        SUM(\n            cash_line.debit_in_account_currency\n          - cash_line.credit_in_account_currency\n        ) OVER (\n            PARTITION BY cash_line.account\n            ORDER BY je.posting_date, je.name, cash_line.name\n        ) AS running_balance\n\n    FROM `tabJournal Entry` AS je\n    JOIN `tabJournal Entry Account` AS cash_line\n        ON je.name = cash_line.parent\n    LEFT JOIN `tabJournal Entry Account` AS other_line\n        ON je.name = other_line.parent\n        AND other_line.name != cash_line.name\n\n    WHERE\n        cash_line.account = %(account)s\n        AND (\n            (%(from_date)s IS NULL OR je.posting_date >= %(from_date)s)\n            AND (%(to_date)s IS NULL OR je.posting_date <= %(to_date)s)\n        )\n\n    GROUP BY\n        je.name,\n        je.posting_date,\n        cash_line.name\n)\n\nSELECT\n    \"\" AS print_col,\n    \"Opening\" AS voucher,\n    %(from_date)s AS posting_date,\n    %(account)s AS cash_account,\n    \"\" AS counter_details,\n    \"Opening Balance\" AS remark,\n    \"\" AS status,\n    \"\" AS payment_type,\n    0 AS debit,\n    0 AS credit,\n    opening_balance AS running_balance\nFROM opening\n\nUNION ALL\n\nSELECT * FROM main\n\n",
+ "query": "WITH opening AS (\n    SELECT \n        COALESCE(\n            SUM(jea.debit_in_account_currency - jea.credit_in_account_currency), 0\n        ) AS opening_balance\n    FROM `tabJournal Entry Account` jea\n    JOIN `tabJournal Entry` je ON je.name = jea.parent\n    WHERE\n        jea.account = %(account)s\n        AND (\n            %(from_date)s IS NULL\n            OR je.posting_date < %(from_date)s\n        )\n),\n\nmain AS (\n    SELECT\n       \n        CONCAT(\n            '<button class=\"btn btn-xs btn-primary print-je\" data-name=\"',\n            je.name,'\">\ud83d\udda8</button>') AS print_col,\n\n        je.name AS voucher,\n        je.posting_date AS posting_date,\n        cash_line.account AS cash_account,\n\n        GROUP_CONCAT(\n            CONCAT(\n                other_line.account,\n                IF(other_line.party IS NOT NULL, CONCAT(' (', other_line.party, ')'), ''),\n                ' D:', other_line.debit_in_account_currency,\n                ' C:', other_line.credit_in_account_currency\n            ) SEPARATOR '; '\n        ) AS counter_details,\n\n        je.remark AS remark,\n\n        CASE je.docstatus\n            WHEN 0 THEN 'Draft'\n            WHEN 1 THEN 'Submitted'\n            WHEN 2 THEN 'Cancelled'\n        END AS status,\n\n        je.custom_payment_type AS payment_type,\n\n        cash_line.debit_in_account_currency AS debit,\n        cash_line.credit_in_account_currency AS credit,\n\n        SUM(\n            cash_line.debit_in_account_currency\n          - cash_line.credit_in_account_currency\n        ) OVER (\n            PARTITION BY cash_line.account\n            ORDER BY je.posting_date, je.name, cash_line.name\n        ) AS running_balance\n\n    FROM `tabJournal Entry` AS je\n    JOIN `tabJournal Entry Account` AS cash_line\n        ON je.name = cash_line.parent\n    LEFT JOIN `tabJournal Entry Account` AS other_line\n        ON je.name = other_line.parent\n        AND other_line.name != cash_line.name\n\n    WHERE\n        cash_line.account = %(account)s\n        AND (\n            (%(from_date)s IS NULL OR je.posting_date >= %(from_date)s)\n            AND (%(to_date)s IS NULL OR je.posting_date <= %(to_date)s)\n        )\n\n    GROUP BY\n        je.name,\n        je.posting_date,\n        cash_line.name\n)\n\nSELECT\n   \n    \"\" AS print_col,\n    \"Opening\" AS voucher,   -- \ud83d\udc48 important\n    %(from_date)s AS posting_date,\n    %(account)s AS cash_account,\n    \"\" AS counter_details,\n    \"Opening Balance\" AS remark,\n    \"\" AS status,\n    \"\" AS payment_type,\n    0 AS debit,\n    0 AS credit,\n    opening_balance AS running_balance\nFROM opening\nUNION ALL\n\nSELECT\n  \n    print_col,\n    voucher,\n    posting_date,\n    cash_account,\n    counter_details,\n    remark,\n    status,\n    payment_type,\n    debit,\n    credit,\n    running_balance\nFROM main\n\n",
  "ref_doctype": "Journal Entry",
  "report_name": "Journal Entry",
  "report_script": "",
