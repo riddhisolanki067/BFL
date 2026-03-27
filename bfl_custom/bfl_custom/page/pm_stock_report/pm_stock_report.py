@@ -1,15 +1,18 @@
 import frappe
+import json
 from frappe.utils import flt
 
 
-def execute(filters=None):
+@frappe.whitelist()
+def get_pm_stock_data(filters):
+    # ✅ FIX: parse string to dict
+    if isinstance(filters, str):
+        filters = json.loads(filters)
+
+    filters = frappe._dict(filters)
+
     validate_filters(filters)
-
-    columns = get_columns()
-    data = get_data(filters or {})
-    return columns, data
-
-
+    return get_data(filters)
 # -------------------------------
 # VALIDATION
 # -------------------------------
@@ -25,48 +28,26 @@ def validate_filters(filters):
 
 
 # -------------------------------
-# COLUMNS
-# -------------------------------
-def get_columns():
-    return [
-        {"label": "Item", "fieldname": "item", "fieldtype": "Link", "options": "Item", "width": 150},
-        {"label": "Opening", "fieldname": "opening", "fieldtype": "Float", "width": 120},
-        {"label": "Gate In", "fieldname": "gate_in", "fieldtype": "Float", "width": 120},
-        {"label": "Purchase", "fieldname": "purchase", "fieldtype": "Float", "width": 120},
-        {"label": "Gate Out", "fieldname": "gate_out", "fieldtype": "Float", "width": 120},
-        {"label": "Sale", "fieldname": "sale", "fieldtype": "Float", "width": 120},
-        {"label": "Packing Production", "fieldname": "packing_production", "fieldtype": "Float", "width": 150},
-        {"label": "Balance Stock", "fieldname": "balance_stock", "fieldtype": "Float", "width": 150},
-        {"label": "Actual Stock", "fieldname": "actual_stock", "fieldtype": "Float", "editable": 1, "width": 120},
-        {"label": "Wastage", "fieldname": "wastage", "fieldtype": "Float", "width": 120},
-    ]
-
-
-# -------------------------------
-# ITEMS FILTER LOGIC
+# ITEMS
 # -------------------------------
 def get_items(filters):
     group = frappe.db.get_value("Item Group", "Packing Material", ["lft", "rgt"], as_dict=1)
 
-    query = """
+    items = frappe.db.sql("""
         SELECT name FROM tabItem
         WHERE item_group IN (
             SELECT name FROM `tabItem Group`
             WHERE lft >= %s AND rgt <= %s
         )
-    """
+    """, (group.lft, group.rgt), as_dict=1)
 
-    items = frappe.db.sql(query, (group.lft, group.rgt), as_dict=1)
-
-    # Apply Item filter
     if filters.get("item"):
         items = [d for d in items if d.name == filters.get("item")]
 
-    # Apply Item Group filter
     elif filters.get("item_group"):
         items = frappe.db.sql("""
             SELECT name FROM tabItem
-            WHERE item_group = %s
+            WHERE item_group=%s
         """, (filters.get("item_group"),), as_dict=1)
 
     return items
@@ -90,12 +71,8 @@ def get_data(filters):
         sales = get_sales(item_code, filters)
 
         balance = (
-            opening
-            + gate_in
-            + purchase
-            - gate_out
-            - sales
-            - packing_prod
+            opening + gate_in + purchase
+            - gate_out - sales - packing_prod
         )
 
         result.append({
@@ -107,7 +84,6 @@ def get_data(filters):
             "sale": sales,
             "packing_production": packing_prod,
             "balance_stock": balance,
-           
            
         })
 
@@ -127,7 +103,7 @@ def get_opening(item, filters):
             SELECT name FROM `tabPacking Production`
             WHERE date < %s
         )
-    """, (item, filters.get("from_date")))[0][0])
+    """, (item, filters.from_date))[0][0])
 
 
 def get_gate_qty(item, filters, entry_type):
@@ -140,7 +116,7 @@ def get_gate_qty(item, filters, entry_type):
             WHERE entry_type=%s
             AND posting_date BETWEEN %s AND %s
         )
-    """, (item, entry_type, filters.get("from_date"), filters.get("to_date")))[0][0])
+    """, (item, entry_type, filters.from_date, filters.to_date))[0][0])
 
 
 def get_purchase(item, filters):
@@ -153,20 +129,18 @@ def get_purchase(item, filters):
             WHERE custom_gate_entry IS NOT NULL
             AND posting_date BETWEEN %s AND %s
         )
-    """, (item, filters.get("from_date"), filters.get("to_date")))[0][0])
+    """, (item, filters.from_date, filters.to_date))[0][0])
 
 
-# 🔥 USING FILTER BOM ONLY
 def get_packing_production(item, filters):
     return flt(frappe.db.sql("""
         SELECT SUM(pp.box * bi.qty)
         FROM `tabPacking Production` p
         JOIN `tabPacking Production Item` pp ON pp.parent = p.name
         JOIN `tabBOM Item` bi ON bi.parent = %s
-
         WHERE bi.item_code = %s
         AND p.date BETWEEN %s AND %s
-    """, (filters.get("bom"), item, filters.get("from_date"), filters.get("to_date")))[0][0])
+    """, (filters.bom, item, filters.from_date, filters.to_date))[0][0])
 
 
 def get_sales(item, filters):
@@ -174,10 +148,9 @@ def get_sales(item, filters):
         SELECT SUM(sii.qty * bi.qty)
         FROM `tabSales Invoice Item` sii
         JOIN `tabBOM Item` bi ON bi.parent = %s
-
         WHERE bi.item_code = %s
         AND sii.parent IN (
             SELECT name FROM `tabSales Invoice`
             WHERE posting_date BETWEEN %s AND %s
         )
-    """, (filters.get("bom"), item, filters.get("from_date"), filters.get("to_date")))[0][0])
+    """, (filters.bom, item, filters.from_date, filters.to_date))[0][0])
