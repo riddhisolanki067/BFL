@@ -1,38 +1,18 @@
-frappe.query_reports["Journal Entry"] = {
-    onload: function() {
-
-        // Attach once
-        $(document).on("click", ".print-je", function() {
-            let name = $(this).data("name");
-            if (!name) return;
-
-            let url = `/api/method/frappe.utils.print_format.download_pdf?` +
-                `doctype=Journal Entry&name=${name}&format=Standard&no_letterhead=0`;
-
-            window.open(url);
+frappe.query_reports["Journal Entry Script"] = {
+    get_datatable_options(options) {
+        return Object.assign(options, {
+            checkboxColumn: true
         });
     },
-// formatter: function(value, row, column, data, default_formatter) {
-//     value = default_formatter(value, row, column, data);
 
-//     // ✅ Checkbox only for real vouchers
-//     if (
-//         column.fieldname === "select_row"
-      
-//     ) {
-//         return `<input type="checkbox" class="je-check" data-name="${data.voucher}">`;
-//     }
-//         return value;
-// },
+
     filters: [
-         {
+        {
             fieldname: "show_opening",
             label: "Include Opening Balance",
             fieldtype: "Select",
-            options: [
-                "Yes","No"
-            ],
-            default: 0
+            options: ["Yes", "No"],
+            default: "No"
         },
         {
             fieldname: "account",
@@ -75,7 +55,7 @@ frappe.query_reports["Journal Entry"] = {
 
                 if (!month || !year) return;
 
-                let monthIndex = new Date(Date.parse(month +" 1, "+year)).getMonth();
+                let monthIndex = new Date(Date.parse(month + " 1, " + year)).getMonth();
 
                 let firstDay = new Date(year, monthIndex, 1);
                 let lastDay = new Date(year, monthIndex + 1, 0);
@@ -89,10 +69,33 @@ frappe.query_reports["Journal Entry"] = {
                     "to_date",
                     frappe.datetime.obj_to_str(lastDay)
                 );
-            },
-            
-            
+            }
         }
-       
-    ]
+    ],
+
+    onload: function(report) {
+
+        // Print button click
+        $(document).on("click", ".print-je", function() {
+            let name = $(this).data("name");
+            if (!name) return;
+
+            let url = `/api/method/frappe.utils.print_format.download_pdf?doctype=Journal Entry&name=${name}&format=Standard&no_letterhead=0`;
+            window.open(url);
+        });
+    },
+
+    formatter: function(value, row, column, data, default_formatter) {
+
+        value = default_formatter(value, row, column, data);
+
+        // ❌ Remove checkbox for opening row
+        if (column.fieldname === "select_row") {
+            if (data.voucher === "Opening") {
+                return "";
+            }
+        }
+
+        return value;
+    }
 };

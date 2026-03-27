@@ -5,26 +5,72 @@ frappe.pages['purchase-comparision'].on_page_load = function(wrapper) {
 		single_column: true
 	});
 
-   const pi = frappe.route_options?.pi;
+	var filterContainer = $(`
+		<div class="row align-items-end" style="margin-bottom:20px;">
+		</div>
+	`).appendTo(page.body);
 
-	console.log(pi)
+	
+	var itemCol = $(`
+		<div class="col-md-3">
+			<label style="font-weight:600;">Item</label>
+		</div>
+	`).appendTo(filterContainer);
 
-    page.add_action_item(__('Print'), () => window.print());
+	var itemInput = frappe.ui.form.make_control({
+		parent: itemCol,
+		df: {
+			fieldtype: "Link",
+			fieldname: "item",
+			options: "Item",
+			placeholder: "Select Item"
+		},
+		render_input: true
+	});
 
-    if (!pi) {
-        page.main.html('<p>No Purchase Invoice selected</p>');
-        return;
-    }
+	itemInput.refresh();
 
-    frappe.call({
-        method: 'bfl_custom.py.purchase_comparison.get_data',
-        args: { pi },
-        callback(r) {
-            page.main.html(render_html(r.message));
-        }
-    });
+	var reportContainer = $(`
+		<div id="report-container"></div>
+	`).appendTo(page.body);
+
+	const pi = frappe.route_options?.pi;
+
+	page.add_action_item(__('Print'), () => window.print());
+
+	function load_data() {
+
+		if (!pi) {
+			reportContainer.html('<p>No Purchase Invoice selected</p>');
+			return;
+		}
+
+		let args = { pi: pi };
+
+		let selected_item = itemInput.get_value();
+		if (selected_item) {
+			args.item = selected_item;
+		}
+
+		frappe.call({
+			method: 'bfl_custom.py.purchase_comparison.get_data',
+			args: args,
+			callback(r) {
+				
+				reportContainer.html(render_html(r.message));
+			}
+		});
+	}
+
+
+	itemInput.df.change = function () {
+		load_data();
+	};
+
+	
+	load_data();
 };
-
+    
 function render_html(data) {
 
     let html = `
@@ -166,20 +212,34 @@ function render_html(data) {
         </tr>
     `;
 
-    Object.keys(data.history).forEach(item => {
-        data.history[item].forEach(r => {
+            let all_records = [];
+
+            // Flatten all history records
+            Object.keys(data.history).forEach(item => {
+                all_records = all_records.concat(data.history[item]);
+            });
+
+            // Sort by posting_date DESC
+            all_records.sort((a, b) => {
+                return new Date(b.posting_date) - new Date(a.posting_date);
+            });
+
+            // Loop sorted data
+            all_records.forEach(r => {
             const amount = (r.qty * r.rate).toFixed(2);
             html += `
             <tr>
                 <td>${r.supplier}</td>
                 <td>${r.bill_no}</td>
-                <td>${r.name}</td>
+                <td><a href="/app/purchase-invoice/${r.name}" target="_blank">
+                        ${r.name}
+                    </a></td>
                 <td>${frappe.datetime.str_to_user(r.posting_date)}</td>
                 <td>${r.item_code}</td>
                 <td>${r.uom}</td>
                 <td>${r.qty}</td>
                 <td>${r.qty}</td>
-                <td>${r.rejected_qty}</td>
+                <td>${""}</td>
                 <td>${r.rate}</td>
                 <td>${amount}</td>
                 <td>${r.status}</td>
@@ -187,7 +247,8 @@ function render_html(data) {
                 
             </tr>`;
         });
-    });
+        
+  
 
     html += `
     </table>
