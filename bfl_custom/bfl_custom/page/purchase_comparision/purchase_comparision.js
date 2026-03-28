@@ -72,7 +72,11 @@ frappe.pages['purchase-comparision'].on_page_load = function(wrapper) {
 };
     
 function render_html(data) {
-
+    // Create item -> rate map from CURRENT table
+        let current_rate_map = {};
+        data.current_items.forEach(d => {
+            current_rate_map[d.item_name] = d.rate;
+        });
     let html = `
     <style>
         body {
@@ -158,10 +162,12 @@ function render_html(data) {
             <th>UOM</th>
             <th>BILL QTY</th>
             <th>ACCEPT QTY</th>
-            <th>REJECTED QTY</th>
             <th>RATE</th>
             <th>Amount</th>
             <th>CREDIT DAYS</th>
+            <th>Landed Cost</th>
+            <th>Outstanding</th>
+
            
         </tr>
     `;
@@ -177,11 +183,12 @@ function render_html(data) {
             <td>${d.uom}</td>
             <td>${d.qty}</td>
             <td>${d.qty}</td>
-            <td>${d.rejected_qty}</td>
+            
             <td>${d.rate}</td>
             <td>${amount}</td>
             <td>0</td>
-            
+            <td>${d.custom_landed_cost}</td>
+            <td>${data.pi.outstanding_amount}</td>
         </tr>`;
     });
 
@@ -201,12 +208,13 @@ function render_html(data) {
             <th>UOM</th>
             <th>BILL QTY</th>
             <th>ACCEPT QTY</th>
-            <th>REJECTED QTY</th>
+            
             <th>RATE</th>
             <th>Amount</th>
             <th>Status</th>
             <th>Remarks</th>
-
+            <th>Landed Cost</th>
+            <th>Outstanding</th>
            
            
         </tr>
@@ -226,29 +234,43 @@ function render_html(data) {
 
             // Loop sorted data
             all_records.forEach(r => {
-            const amount = (r.qty * r.rate).toFixed(2);
-            html += `
-            <tr>
-                <td>${r.supplier}</td>
-                <td>${r.bill_no}</td>
-                <td><a href="/app/purchase-invoice/${r.name}" target="_blank">
-                        ${r.name}
-                    </a></td>
-                <td>${frappe.datetime.str_to_user(r.posting_date)}</td>
-                <td>${r.item_code}</td>
-                <td>${r.uom}</td>
-                <td>${r.qty}</td>
-                <td>${r.qty}</td>
-                <td>${""}</td>
-                <td>${r.rate}</td>
-                <td>${amount}</td>
-                <td>${r.status}</td>
-                <td>${r.remarks}</td>
-                
-            </tr>`;
-        });
-        
-  
+    const amount = (r.qty * r.rate).toFixed(2);
+
+    // Get current rate
+    let current_rate = current_rate_map[r.item_code] 
+
+    // Decide color
+    let rate_color = "";
+    if (current_rate) {
+        if (r.rate > current_rate) {
+            rate_color = "background-color:#ff0007;";
+        } else if (r.rate < current_rate) {
+            rate_color = "background-color:#26d929;"; 
+        }
+    }
+
+    html += `
+    <tr>
+        <td>${r.supplier}</td>
+        <td>${r.bill_no}</td>
+        <td>
+            <a href="/app/purchase-invoice/${r.name}" target="_blank">
+                ${r.name}
+            </a>
+        </td>
+        <td>${frappe.datetime.str_to_user(r.posting_date)}</td>
+        <td>${r.item_code}</td>
+        <td>${r.uom}</td>
+        <td>${r.qty}</td>
+        <td>${r.qty}</td>
+        <td style="${rate_color}">${r.rate}</td>
+        <td>${amount}</td>
+        <td>${r.status}</td>
+        <td>${r.remarks}</td>
+        <td>${r.custom_landed_cost}</td>
+        <td>${r.outstanding_amount}</td>
+    </tr>`;
+});
 
     html += `
     </table>

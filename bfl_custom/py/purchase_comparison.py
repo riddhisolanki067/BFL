@@ -17,7 +17,8 @@ def get_data(pi, item=None):
             "qty": d.qty,
             "rate": d.rate,
             "uom": d.uom,
-            "rejected_qty": d.rejected_qty
+            "rejected_qty": d.rejected_qty,
+            "custom_landed_cost": d.custom_landed_cost
         })
 
     history = {}
@@ -46,6 +47,8 @@ def get_data(pi, item=None):
                 pi.remarks,
                 pi.status,
                 pi.posting_date,
+                pi.outstanding_amount,
+                pii.custom_landed_cost,
                 pii.item_code,
                 pii.uom,
                 pii.qty,
@@ -75,7 +78,9 @@ def get_data(pi, item=None):
             "supplier_gstin": pi_doc.supplier_gstin,
             "status":pi_doc.status,
             "remarks": pi_doc.remarks,
-            "contact_number": pi_doc.contact_mobile
+            "contact_number": pi_doc.contact_mobile,
+            "outstanding_amount": pi_doc.outstanding_amount
+           
         },
         "current_items": current_items,
         "history": history
