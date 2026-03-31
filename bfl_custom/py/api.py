@@ -23,7 +23,7 @@ def validate_suspense(doc, method=None):
     item_flag = any(contains_suspense(item.item_code) for item in doc.items)
 
     # Final condition
-    if party_flag and item_flag:
+    if party_flag or item_flag:
         frappe.throw(
             "Not allowed: Both Party name and Item Code contain 'Suspense'."
         )
