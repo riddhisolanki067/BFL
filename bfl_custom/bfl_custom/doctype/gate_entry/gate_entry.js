@@ -44,5 +44,14 @@ frappe.ui.form.on("GATE ENTRY", {
                 }
             }
         })
+    },
+    party: function(frm) {
+        frm.set_query("reference", function() {
+            return {
+                filters: {
+                    party: frm.doc.party
+                }
+            };
+        });
     }
 }); 
