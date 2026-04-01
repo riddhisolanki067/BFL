@@ -153,20 +153,19 @@ doc_events = {
 	},
 	"Sales Order": {
 		"before_save": "bfl_custom.py.sales_order.execute",
-		"before_insert": "bfl_custom.py.api.validate_suspense"
+		"before_save": "bfl_custom.py.api.validate_suspense"
 		
 	},
 		"Purchase Order": {
-				"before_insert": "bfl_custom.py.api.validate_suspense"
+				"before_save": "bfl_custom.py.api.validate_suspense"
 		
 	},
 		"Sales Invoice": {
-				"before_insert": "bfl_custom.py.api.validate_suspense"
-
+				"before_save": "bfl_custom.py.api.validate_suspense"
 		
 	},
 		"Purchase Invoice": {
-				"before_insert": "bfl_custom.py.api.validate_suspense"
+				"before_save": "bfl_custom.py.api.validate_suspense"
 		}
 }
 
