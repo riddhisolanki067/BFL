@@ -27,3 +27,52 @@ def validate_suspense(doc, method=None):
         frappe.throw(
             "Not allowed: Both Party name and Item Code contain 'Suspense'."
         )
+
+import frappe
+
+@frappe.whitelist()
+def get_pending_advances(employee, month):
+    """
+    Fetch all pending advance/loan rows from JE Accounts child table
+    """
+
+    data = frappe.db.sql("""
+        SELECT 
+            jea.name AS row_id,
+            jea.parent AS journal_entry,
+            jea.custom_type,
+            jea.custom_month,
+            (jea.debit_in_account_currency - jea.credit_in_account_currency) AS amount
+        FROM `tabJournal Entry Account` jea
+        JOIN `tabJournal Entry` je ON je.name = jea.parent
+        WHERE 
+            jea.employee = %s
+            AND jea.custom_month = %s
+            AND jea.custom_is_deducted = 0
+            
+            AND je.custom_type IN ('Advance Salary', 'Loan')
+    """, (employee, month), as_dict=True)
+
+    return data
+
+
+@frappe.whitelist()
+def mark_child_rows_deducted(row_ids, salary_journal_entry):
+    """
+    Mark selected JE Account rows as deducted and link to salary JE
+    """
+
+    if isinstance(row_ids, str):
+        row_ids = frappe.parse_json(row_ids)
+
+    for row_id in row_ids:
+        frappe.db.set_value(
+            "Journal Entry Account",
+            row_id,
+            {
+                "custom_is_deducted": 1,
+                "deducted_against": salary_journal_entry
+            }
+        )
+
+    frappe.db.commit()
