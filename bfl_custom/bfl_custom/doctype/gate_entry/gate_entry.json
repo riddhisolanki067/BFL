@@ -3,6 +3,7 @@
  "allow_rename": 1,
  "autoname": "naming_series:",
  "creation": "2026-01-24 22:12:15.787257",
+ "default_view": "List",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -96,7 +97,7 @@
    "fieldname": "purpose",
    "fieldtype": "Select",
    "label": "PURPOSE",
-   "options": "MATERIAL REPAIRING\nLOAN GIVEN\nTRANSFER TO SOLIS\nSPARE PURCHASE\nRM PURCHASE\nLoan IN\nLoan Return"
+   "options": "MATERIAL REPAIRING\nLOAN GIVEN\nTRANSFER TO SOLIS\nSPARE PURCHASE\nRM PURCHASE\nLoan IN\nLoan Return\nSales"
   },
   {
    "fieldname": "gate_out_time",
@@ -180,7 +181,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-12 18:42:35.250464",
+ "modified": "2026-04-08 15:50:15.620152",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "GATE ENTRY",
