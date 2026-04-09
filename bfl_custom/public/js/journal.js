@@ -1,6 +1,6 @@
 frappe.ui.form.on('Journal Entry', {
     before_Save(frm) {
-        if (frm.doc.docstatus !== 0) return;
+       
 
         let employee = null;
         let month = null;
