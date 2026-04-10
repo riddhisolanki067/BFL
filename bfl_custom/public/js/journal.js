@@ -62,52 +62,69 @@ function show_dialog(frm, data) {
                 label: "Pending Entries",
                 fields: [
                     { fieldname: "row_id", fieldtype: "Data", hidden: 1 },
-                    { fieldname: "journal_entry", label: "Journal Entry", fieldtype: "Link", options: "Journal Entry" },
-                    { fieldname: "type", label: "Type", fieldtype: "Data" },
-                    { fieldname: "amount", label: "Amount", fieldtype: "Currency" },
-                    { fieldname: "adjust", label: "Adjust", fieldtype: "Check" }
+                    { fieldname: "journal_entry", in_list_view: 1, label: "Journal Entry", fieldtype: "Link", options: "Journal Entry" },
+                    { fieldname: "amount", in_list_view: 1, label: "Amount", fieldtype: "Currency" },
+                    { fieldname: "custom_month", in_list_view: 1, label: "Month", fieldtype: "Data" },
+                    { fieldname: "party", in_list_view: 1, label: "Party", fieldtype: "Data" },
+                    { fieldname: "custom_type", in_list_view: 1, label: "Type", fieldtype: "Data" },
+  
+                    { fieldname: "adjust", in_list_view: 1, label: "Adjust", fieldtype: "Check" }
                 ]
             }
         ],
         primary_action_label: "Apply Adjustment",
 
-        primary_action(values) {
+       primary_action(values) {
 
-            let total = 0;
-            let selected_rows = [];
+    let total = 0;
+    let selected_rows = [];
 
-            (values.advances || []).forEach(row => {
-                if (row.adjust) {
-                    total += flt(row.amount);
-                    selected_rows.push(row.row_id);
-                }
-            });
+    (values.advances || []).forEach(row => {
+        if (row.adjust) {
+            total += flt(row.amount);
+            selected_rows.push(row.row_id);
+        }
+    });
 
-            if (total === 0) {
-                frappe.msgprint("No rows selected");
-                return;
+    if (total === 0) {
+        frappe.msgprint("No rows selected");
+        return;
+    }
+
+    let adjusted = false;
+
+    (frm.doc.accounts || []).forEach(row => {
+
+        if (row.custom_type === "Salary") {
+
+            if (row.credit_in_account_currency > 0) {
+                row.credit_in_account_currency -= total;
+                adjusted = true;
+            } else if (row.debit_in_account_currency > 0) {
+                row.debit_in_account_currency -= total;
+                adjusted = true;
             }
+        }
+    });
 
-            // 🔹 Add deduction entry in JE
-            let new_row = frm.add_child("accounts");
+    if (!adjusted) {
+        frappe.msgprint("Salary row not found");
+        return;
+    }
 
-            new_row.account = "Advance Adjustment Account"; // change this
-            new_row.debit_in_account_currency = total;
+    frm.refresh_field("accounts");
 
-            frm.refresh_field("accounts");
+    // 🔹 Mark deducted in backend
+    frappe.call({
+        method: "bfl_custom.py.api.mark_child_rows_deducted",
+        args: {
+            row_ids: selected_rows,
+            salary_journal_entry: frm.doc.name || "Draft"
+        }
+    });
 
-            // 🔹 Mark rows deducted + link JE
-            frappe.call({
-                method: "bfl_custom.bfl_custom.py.api.mark_child_rows_deducted",
-                args: {
-                    row_ids: selected_rows,
-                    salary_journal_entry: frm.doc.name || "Draft"
-                }
-            });
-
-            frappe.msgprint("Advances adjusted successfully");
-
-            dialog.hide();
+        frappe.msgprint("Advance adjusted in salary row");
+        dialog.hide();
         }
     });
 
