@@ -106,6 +106,8 @@ function show_dialog(frm, data) {
                 adjusted = true;
             }
         }
+        frm.save();
+        frm.reload_doc();
     });
 
     if (!adjusted) {
