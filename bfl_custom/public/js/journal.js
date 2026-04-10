@@ -14,8 +14,8 @@ frappe.ui.form.on('Journal Entry', {
                     employee = row.party;
                 }
 
-                if (row.month) {
-                    month = row.month;
+                if (row.custom_month) {
+                    month = row.custom_month;
                 }
             }
         });
