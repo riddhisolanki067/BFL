@@ -130,6 +130,7 @@ function show_dialog(frm, data) {
 
         frappe.msgprint("Advance adjusted in salary row");
         dialog.hide();
+        frm.refresh();  // Refresh to show updated values
         frm.__adjustment_done = true;  // ✅ prevent loop
         frappe.validated = true;
 
