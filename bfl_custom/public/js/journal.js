@@ -1,16 +1,16 @@
 frappe.ui.form.on('Journal Entry', {
     before_Save(frm) {
        
-
+        console.log("Before Save Triggered");
         let employee = null;
         let month = null;
         let found_salary_row = false;
 
         (frm.doc.accounts || []).forEach(row => {
-
+            console.log("Checking row:", row);
             if (row.custom_type === "Salary") {
                 found_salary_row = true;
-
+                console.log("Found Salary Row:", row);
                 if (row.employee) {
                     employee = row.employee;
                 }
@@ -22,11 +22,16 @@ frappe.ui.form.on('Journal Entry', {
         });
 
         // stop if no salary row
-        if (!found_salary_row) return;
+        if (!found_salary_row) {
+            console.log("No salary row found");
+            return;
+        }
 
         // stop if required data missing
-        if (!employee || !month) return;
-
+        if (!employee || !month) {
+            console.log("Required data missing");
+            return;
+        }
 
         // Fetch pending advances
         frappe.call({
@@ -36,8 +41,9 @@ frappe.ui.form.on('Journal Entry', {
                 month: frm.doc.custom_month
             },
             callback: function(r) {
-
+                console.log("Pending Advances Response:", r);
                 if (r.message && r.message.length > 0) {
+                    console.log("Showing dialog with data:", r.message);
                     show_dialog(frm, r.message);
                 }
             }
