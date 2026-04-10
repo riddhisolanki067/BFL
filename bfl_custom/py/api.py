@@ -46,7 +46,7 @@ def get_pending_advances(employee, month):
         FROM `tabJournal Entry Account` jea
         JOIN `tabJournal Entry` je ON je.name = jea.parent
         WHERE 
-            jea.employee = %s
+            jea.party = %s
             AND jea.custom_month = %s
             AND jea.custom_is_deducted = 0
             
