@@ -1,6 +1,5 @@
 frappe.ui.form.on('Journal Entry', {
-    before_Save(frm) {
-       
+    before_save(frm) {
         console.log("Before Save Triggered");
         let employee = null;
         let month = null;
