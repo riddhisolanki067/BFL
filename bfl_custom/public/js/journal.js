@@ -10,8 +10,8 @@ frappe.ui.form.on('Journal Entry', {
             if (row.custom_type === "Salary") {
                 found_salary_row = true;
                 console.log("Found Salary Row:", row);
-                if (row.employee) {
-                    employee = row.employee;
+                if (row.party_type === "Employee") {
+                    employee = row.party;
                 }
 
                 if (row.month) {
