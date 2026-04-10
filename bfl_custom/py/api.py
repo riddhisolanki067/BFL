@@ -50,7 +50,7 @@ def get_pending_advances(employee, month):
             AND jea.custom_month = %s
             AND jea.custom_is_deducted = 0
             
-            AND jea.custom_type IN ('Advance Salary', 'Loan')
+            AND jea.custom_type IN ('Advance', 'Loan')
     """, (employee, month), as_dict=True)
 
     return data
