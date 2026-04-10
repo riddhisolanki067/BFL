@@ -101,13 +101,11 @@ function show_dialog(frm, data) {
             if (row.credit_in_account_currency > 0) {
                 row.credit_in_account_currency -= total;
                 adjusted = true;
-                frm.save();
-                frm.reload_doc();
+            
             } else if (row.debit_in_account_currency > 0) {
                 row.debit_in_account_currency -= total;
                 adjusted = true;
-                frm.save();
-                  frm.reload_doc();
+            
             }
         }
         
@@ -119,6 +117,8 @@ function show_dialog(frm, data) {
     }
 
     frm.refresh_field("accounts");
+    frm.save();
+    frm.reload_doc();
 
     // 🔹 Mark deducted in backend
     frappe.call({
@@ -132,8 +132,7 @@ function show_dialog(frm, data) {
         frappe.msgprint("Advance adjusted in salary row");
         dialog.hide();
         console.log("Adjustment applied for rows:", selected_rows,row_ids);
-        frm.save();
-        frm.reload_doc();
+    
         }
     });
 
