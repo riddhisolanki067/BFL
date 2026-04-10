@@ -55,6 +55,7 @@ function show_dialog(frm, data) {
 
     let dialog = new frappe.ui.Dialog({
         title: "Adjust Advances / Loans",
+        size: "large", 
         fields: [
             {
                 fieldname: "advances",
@@ -126,6 +127,8 @@ function show_dialog(frm, data) {
         frappe.msgprint("Advance adjusted in salary row");
         dialog.hide();
         console.log("Adjustment applied for rows:", selected_rows,row_ids);
+        frm.save();
+        frm.reload_doc();
         }
     });
 

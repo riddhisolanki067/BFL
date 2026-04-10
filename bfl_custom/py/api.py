@@ -42,6 +42,7 @@ def get_pending_advances(employee, month):
             jea.parent AS journal_entry,
             jea.custom_type,
             jea.custom_month,
+            jea.custom_employee,
             (jea.debit_in_account_currency - jea.credit_in_account_currency) AS amount
         FROM `tabJournal Entry Account` jea
         JOIN `tabJournal Entry` je ON je.name = jea.parent
