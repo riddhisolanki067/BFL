@@ -62,13 +62,13 @@ function show_dialog(frm, data) {
                 label: "Pending Entries",
                 fields: [
                     { fieldname: "row_id", fieldtype: "Data", hidden: 1 },
+                    { fieldname: "adjust", in_list_view: 1, label: "Adjust", fieldtype: "Check" },
                     { fieldname: "journal_entry", in_list_view: 1, label: "Journal Entry", fieldtype: "Link", options: "Journal Entry" },
                     { fieldname: "amount", in_list_view: 1, label: "Amount", fieldtype: "Currency" },
                     { fieldname: "custom_month", in_list_view: 1, label: "Month", fieldtype: "Data" },
                     { fieldname: "custom_employee", in_list_view: 1, label: "Party", fieldtype: "Data" },
-                    { fieldname: "custom_type", in_list_view: 1, label: "Type", fieldtype: "Data" },
+                    { fieldname: "custom_type", in_list_view: 1, label: "Type", fieldtype: "Data" }
   
-                    { fieldname: "adjust", in_list_view: 1, label: "Adjust", fieldtype: "Check" }
                 ]
             }
         ],
