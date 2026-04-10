@@ -119,12 +119,13 @@ function show_dialog(frm, data) {
         method: "bfl_custom.py.api.mark_child_rows_deducted",
         args: {
             row_ids: selected_rows,
-            salary_journal_entry: frm.doc.name || "Draft"
+            salary_journal_entry: frm.doc.name 
         }
     });
 
         frappe.msgprint("Advance adjusted in salary row");
         dialog.hide();
+        console.log("Adjustment applied for rows:", selected_rows,row_ids);
         }
     });
 

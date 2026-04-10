@@ -71,7 +71,7 @@ def mark_child_rows_deducted(row_ids, salary_journal_entry):
             row_id,
             {
                 "custom_is_deducted": 1,
-                "deducted_against": salary_journal_entry
+                
             }
         )
 
