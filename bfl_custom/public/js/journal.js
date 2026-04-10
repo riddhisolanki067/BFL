@@ -130,6 +130,10 @@ function show_dialog(frm, data) {
 
         frappe.msgprint("Advance adjusted in salary row");
         dialog.hide();
+        frm.__adjustment_done = true;  // ✅ prevent loop
+        frappe.validated = true;
+
+        frm.save();  // ✅ NOW SAVE PROPERLY
         console.log("Adjustment applied for rows:", selected_rows,row_ids);
     
         }
