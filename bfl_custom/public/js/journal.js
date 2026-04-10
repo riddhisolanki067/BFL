@@ -101,13 +101,16 @@ function show_dialog(frm, data) {
             if (row.credit_in_account_currency > 0) {
                 row.credit_in_account_currency -= total;
                 adjusted = true;
+                frm.save();
+                frm.reload_doc();
             } else if (row.debit_in_account_currency > 0) {
                 row.debit_in_account_currency -= total;
                 adjusted = true;
+                frm.save();
+                  frm.reload_doc();
             }
         }
-        frm.save();
-        frm.reload_doc();
+        
     });
 
     if (!adjusted) {
