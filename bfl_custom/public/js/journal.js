@@ -117,8 +117,7 @@ function show_dialog(frm, data) {
     }
 
     frm.refresh_field("accounts");
-    frm.save();
-    frm.reload_doc();
+
 
     // 🔹 Mark deducted in backend
     frappe.call({
