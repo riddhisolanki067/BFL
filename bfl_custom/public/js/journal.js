@@ -34,7 +34,7 @@ frappe.ui.form.on('Journal Entry', {
 
         // Fetch pending advances
         frappe.call({
-            method: "bfl_custom.bfl_custom.py.api.get_pending_advances",
+            method: "bfl_custom.py.api.get_pending_advances",
             args: {
                 employee: employee,
                 month: frm.doc.custom_month
