@@ -6,6 +6,46 @@ def execute(filters=None):
     data = get_data(filters)
     return columns, data
 
+def get_columns():
+    return [
+        {
+            "label": "Employee",
+            "fieldname": "employee",
+            "fieldtype": "Data",
+            "width": 150
+        },
+        {
+            "label": "Type",
+            "fieldname": "type",
+            "fieldtype": "Data",
+            "width": 100
+        },
+        {
+            "label": "Date",
+            "fieldname": "date",
+            "fieldtype": "Date",
+            "width": 120
+        },
+        {
+            "label": "Advance Amount",
+            "fieldname": "advance",
+            "fieldtype": "Currency",
+            "width": 130
+        },
+        {
+            "label": "Loan Paid",
+            "fieldname": "loan_paid",
+            "fieldtype": "Currency",
+            "width": 130
+        },
+        {
+            "label": "Balance",
+            "fieldname": "balance",
+            "fieldtype": "Currency",
+            "width": 130
+        }
+    ]
+
 def get_data(filters):
 
     month = filters.get("month")
@@ -33,7 +73,7 @@ def get_data(filters):
         JOIN `tabJournal Entry` je ON je.name = jea.parent
         WHERE 
            
-            AND jea.custom_type IN ('Advance', 'Loan')
+            jea.custom_type IN ('Advance', 'Loan')
             AND (
                 jea.debit_in_account_currency != 0
                 OR jea.credit_in_account_currency != 0
