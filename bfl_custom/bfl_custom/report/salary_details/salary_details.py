@@ -1,6 +1,11 @@
 import frappe
 from collections import defaultdict
 
+def execute(filters=None):
+    columns = get_columns()
+    data = get_data(filters)
+    return columns, data
+
 def get_data(filters):
 
     month = filters.get("month")
@@ -27,14 +32,14 @@ def get_data(filters):
         FROM `tabJournal Entry Account` jea
         JOIN `tabJournal Entry` je ON je.name = jea.parent
         WHERE 
-          
+           
             AND jea.custom_type IN ('Advance', 'Loan')
             AND (
                 jea.debit_in_account_currency != 0
                 OR jea.credit_in_account_currency != 0
             )
             {conditions}
-        ORDER BY  je.posting_date
+        ORDER BY je.posting_date
     """, values, as_dict=True)
 
     grouped = defaultdict(list)
