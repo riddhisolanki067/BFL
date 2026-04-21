@@ -41,7 +41,7 @@ frappe.ui.form.on("RM Consumpation", {
                         args: {
                             doctype: "Item",
                             filters: [
-                                ["item_group", "in", groups],
+                                ["item_group", "in", groups, "Raw Material"],
                                 ["disabled", "=", 0],
                                 ["is_stock_item", "=", 1]
                             ],
