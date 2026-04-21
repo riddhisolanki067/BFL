@@ -31,10 +31,13 @@ frappe.ui.form.on("RM Consumpation", {
                 },
                 callback: function(res) {
 
-                    if (!res.message || res.message.length === 0) return;
-
-                    let groups = res.message.map(d => d.name);
-
+                let groups = ["Raw Material"];
+                if (res.message && res.message.length > 0) {
+                    groups = groups.concat(res.message.map(d => d.name));
+                }
+                    
+                   
+                    
                     // STEP 2: Get Items under those groups
                     frappe.call({
                         method: "frappe.client.get_list",
