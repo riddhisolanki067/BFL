@@ -145,3 +145,231 @@ function show_dialog(frm, data) {
 
     dialog.show();
 }
+
+frappe.ui.form.on('Journal Entry', {
+    onload: function(frm) {
+        // Run only if form is new
+        if (frm.is_new() ) {
+          frappe.db.get_list('User', {
+                    fields: ['name'],
+                    filters: {
+                        role_profile_name: 'Cash User'
+                    }
+            }).then(records => {
+                    if (records) {
+                        console.log(records)
+                        const userNames = records.map(r => r.name);
+                        if (userNames.includes(frappe.session.user)) {
+                            console.log("Current user is a Cash User");
+                            add_expense_operator_rows(frm);
+                            hide_fields_for_expense_operator(frm);
+                            
+
+                        }
+                    }
+                
+                })
+        }
+    },
+    onload_post_render: function(frm) {
+        if (frm.is_new()) {
+            if (frm.doc.__islocal) {
+                frappe.db.get_list('User', {
+                    fields: ['name'],
+                    filters: {
+                        role_profile_name: 'Cash User'
+                    }
+            }).then(records => {
+                    if (records) {
+                        console.log(records)
+                        const userNames = records.map(r => r.name);
+                        if (userNames.includes(frappe.session.user)) {
+                       
+                        hide_fields_for_expense_operator(frm);
+            			frm.add_custom_button(__("Quick Entry Custom"), function () {
+            				return quick_entry(frm);
+            		
+            			})
+                        // Small delay to make sure button is rendered
+                        setTimeout(() => {
+                            const quickEntryBtn = document.querySelector('button[data-label="Quick%20Entry%20Custom"]');
+                            if (quickEntryBtn) {
+                                quickEntryBtn.click();
+                            } 
+                            }, 700);
+                        }   
+                    }       
+                   
+                })
+            }   
+        }
+    }
+})
+
+
+
+function hide_fields_for_expense_operator(frm) {
+    // Hide specific fields (example: cheque_no, cheque_date, user_remark)
+    const fields_to_hide = ['cheque_no','company_gstin', 'cheque_date', 'multi_currency','finance_book','from_template','apply_tds','reference','write_off','printing_settings','addtional_info','subscription_section'];
+
+    fields_to_hide.forEach(f => {
+        frm.set_df_property(f, 'hidden', 1);
+    });
+}
+
+
+ function quick_entry (frm) {
+		var naming_series_options = frm.fields_dict.naming_series.df.options;
+		var naming_series_default =
+			frm.fields_dict.naming_series.df.default || naming_series_options.split("\n")[0];
+
+		var dialog = new frappe.ui.Dialog({
+			title: __("Quick Journal Entry"),
+			fields: [
+			    {
+            		fieldtype: "Select",
+                    label: "Payment Type",
+                    options: ["Pay", "Receive"],
+                    fieldname: "custom_payment_type",
+                    reqd: 1,
+
+				},
+				{
+            		fieldtype: "Select",
+                    label: "Entry Type",
+                    options: ["Journal Entry","Inter Company Journal Entry","Bank Entry","Cash Entry","Credit Card Entry","Debit Note","Credit Note","Contra Entry","Excise Entry","Write Off Entry","Opening Entry","Depreciation Entry","Exchange Rate Revaluation","Exchange Gain Or Loss","Deferred Revenue","Deferred Expense","Reversal Of ITC"],
+                    fieldname: "entry_type"
+				},
+				{ fieldtype: "Currency", fieldname: "debit", label: __("Amount"), reqd: 1 },
+				{
+					fieldtype: "Link",
+					fieldname: "debit_account",
+					label: __("Debit Account"),
+					reqd: 1,
+					options: "Account",
+					get_query: function () {
+						return erpnext.journal_entry.account_query(frm);
+					},
+				},
+				{
+					fieldtype: "Link",
+					fieldname: "credit_account",
+					label: __("Credit Account"),
+					reqd: 1,
+					options: "Account",
+					get_query: function () {
+						return erpnext.journal_entry.account_query(frm);
+					},
+				},
+				{
+					fieldtype: "Date",
+					fieldname: "posting_date",
+					label: __("Date"),
+					reqd: 1,
+					default: frm.doc.posting_date,
+				},
+				{ fieldtype: "Small Text", fieldname: "user_remark", label: __("User Remark") },
+				{
+					fieldtype: "Attach",
+					fieldname: "voucher",
+					label: __("Voucher"),
+				},
+				{
+					fieldtype: "Select",
+					fieldname: "naming_series",
+					label: __("Series"),
+					reqd: 1,
+					options: naming_series_options,
+					default: naming_series_default,
+				},
+			
+				]
+		});
+		
+        	dialog.fields_dict.custom_payment_type.df.onchange = async function () {
+            frappe.defaults.get_default("company");
+            const user = frappe.session.user;
+        
+            let cash_account = "";
+        
+            if (user && company) {
+                await frappe.call({
+                    method: "frappe.client.get",
+                    args: {
+                        doctype: "Employee",
+                        user_id: user
+                    },
+                    callback: function (r) {
+                        if (r.message && r.message.accounts) {
+                            const accounts = r.message.accounts;
+        
+                            // loop through child table
+                            accounts.forEach(row => {
+                                if (row.company === company) {
+                                    cash_account = row.cash_account;
+                                }
+                            });
+        
+                            dialog.set_value("cash_account", cash_account);
+                        }
+                    }
+                });
+            }
+        };
+
+
+		dialog.set_primary_action(__("Save"), function () {
+			var btn = this;
+			var values = dialog.get_values();
+
+			frm.set_value("posting_date", values.posting_date);
+			frm.set_value("user_remark", values.user_remark);
+			frm.set_value("naming_series", values.naming_series);
+			frm.set_value("voucher_type", values.entry_type);
+			frm.set_value("custom_voucher", values.voucher);
+			frm.set_value("custom_payment_type", values.custom_payment_type)
+
+
+			// clear table is used because there might've been an error while adding child
+			// and cleanup didn't happen
+			frm.clear_table("accounts");
+
+			// using grid.add_new_row() to add a row in UI as well as locals
+			// this is required because triggers try to refresh the grid
+
+			var debit_row = frm.fields_dict.accounts.grid.add_new_row();
+			frappe.model.set_value(debit_row.doctype, debit_row.name, "account", values.debit_account);
+			frappe.model.set_value(
+				debit_row.doctype,
+				debit_row.name,
+				"debit_in_account_currency",
+				values.debit
+			);
+
+			var credit_row = frm.fields_dict.accounts.grid.add_new_row();
+			frappe.model.set_value(credit_row.doctype, credit_row.name, "account", values.credit_account);
+			frappe.model.set_value(
+				credit_row.doctype,
+				credit_row.name,
+				"credit_in_account_currency",
+				values.debit
+			);
+
+			frm.save();
+
+			dialog.hide();
+		});
+
+		dialog.show();
+		
+	}
+	
+	frappe.ui.form.on("Journal Entry", {
+    after_save: function(frm) {
+        frappe.msgprint({
+            title: __("Success"),
+            message: __("Voucher <b>{0}</b> has been saved successfully.", [frm.doc.name]),
+            indicator: "green"
+        });
+    }
+});
