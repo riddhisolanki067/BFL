@@ -254,7 +254,7 @@ function hide_fields_for_expense_operator(frm) {
         	dialog.fields_dict.custom_payment_type.df.onchange = async function () {
             const company = frappe.defaults.get_default("company");
             const user = frappe.session.user;
-        
+            console.log(company, user);
             let cash_account = "";
         
             if (user && company) {
@@ -266,7 +266,9 @@ function hide_fields_for_expense_operator(frm) {
                     },
                     callback: function (r) {
                         if (r.message && r.message.accounts) {
+                            console.log(r.message)
                             const accounts = r.message.accounts;
+                            console.log("Employee Accounts:", accounts);
         
                             // loop through child table
                             accounts.forEach(row => {
