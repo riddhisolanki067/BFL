@@ -149,27 +149,21 @@ function show_dialog(frm, data) {
 frappe.ui.form.on('Journal Entry', {
     onload: function(frm) {
         // Run only if form is new
-        if (frm.is_new() ) {
-          frappe.db.get_list('User', {
-                    fields: ['name'],
+        if (frm.is_new()) {
+                frappe.db.get_list('User Role Profile', {
+                    fields: ['parent'],
                     filters: {
-                        role_profile_name: 'Cash User'
+                        parent: frappe.session.user,
+                        role_profile: 'Cash User'
                     }
-            }).then(records => {
-                    if (records) {
-                        console.log(records)
-                        const userNames = records.map(r => r.name);
-                        if (userNames.includes(frappe.session.user)) {
-                            console.log("Current user is a Cash User");
-                            add_expense_operator_rows(frm);
-                            hide_fields_for_expense_operator(frm);
-                            
-
-                        }
+                }).then(records => {
+                    if (records.length) {
+                        console.log("Current user is a Cash User");
+                        add_expense_operator_rows(frm);
+                        hide_fields_for_expense_operator(frm);
                     }
-                
-                })
-        }
+                });
+            }
     },
     onload_post_render: function(frm) {
         if (frm.is_new()) {
