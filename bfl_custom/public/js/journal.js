@@ -150,7 +150,7 @@ frappe.ui.form.on('Journal Entry', {
     onload: function(frm) {
         // Run only if form is new
         if (frm.is_new()) {
-                frappe.db.get_list('User Role Profile', {
+                frappe.db.get_all('User Role Profile', {
                     fields: ['parent'],
                     filters: {
                         parent: frappe.session.user,
