@@ -259,12 +259,25 @@ function hide_fields_for_expense_operator(frm) {
         
             if (user && company) {
                 await frappe.call({
+                    method: "frappe.client.get_list",
+                    args: {
+                        doctype: "Employee",
+                        filters: {
+                            user_id: user
+                        },
+                        fields: ["name", "accounts"]
+                    },
+                    callback: function (r) {
+            if (r.message && r.message.length) {
+                const emp = r.message[0];
+
+                // Now fetch full doc to get child table
+                frappe.call({
                     method: "frappe.client.get",
                     args: {
                         doctype: "Employee",
-                        user_id: user
-                    },
-                    callback: function (r) {
+                        name: emp.name
+                    },ck: function (r) {
                         if (r.message && r.message.accounts) {
                             console.log(r.message)
                             const accounts = r.message.accounts;
@@ -278,12 +291,14 @@ function hide_fields_for_expense_operator(frm) {
                             });
         
                             dialog.set_value("credit_account", cash_account);
-                        }
+                          }
                     }
                 });
             }
-        };
-
+        }
+    });
+}
+            }
 
 		dialog.set_primary_action(__("Save"), function () {
 			var btn = this;
