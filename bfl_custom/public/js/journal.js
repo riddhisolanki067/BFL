@@ -150,19 +150,11 @@ frappe.ui.form.on('Journal Entry', {
     onload: function(frm) {
         // Run only if form is new
         if (frm.is_new()) {
-                frappe.db.get_all('User Role Profile', {
-                    fields: ['parent'],
-                    filters: {
-                        parent: frappe.session.user,
-                        role_profile: 'Cash User'
-                    }
-                }).then(records => {
-                    if (records.length) {
-                        console.log("Current user is a Cash User");
-                        add_expense_operator_rows(frm);
-                        hide_fields_for_expense_operator(frm);
-                    }
-                });
+                if (frappe.user.has_role('Expence Entry Operator')) {
+                console.log("Current user is a Cash User");
+                add_expense_operator_rows(frm);
+                hide_fields_for_expense_operator(frm);
+    }
             }
     },
     onload_post_render: function(frm) {
