@@ -252,7 +252,7 @@ function hide_fields_for_expense_operator(frm) {
 		});
 		
         	dialog.fields_dict.custom_payment_type.df.onchange = async function () {
-            const company = frappe.defaults.get_default("company");
+            const company = frm.doc.company;
             const user = frappe.session.user;
             console.log(company, user);
             let cash_account = "";
