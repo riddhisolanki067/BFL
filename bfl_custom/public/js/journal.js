@@ -147,35 +147,17 @@ function show_dialog(frm, data) {
 }
 
 frappe.ui.form.on('Journal Entry', {
-    onload: function(frm) {
-        // Run only if form is new
-        if (frm.is_new()) {
-                if (frappe.user.has_role('Expence Entry Operator')) {
-                console.log("Current user is a Cash User");
-                // add_expense_operator_rows(frm);
-                hide_fields_for_expense_operator(frm);
-    }
-            }
-    },
     onload_post_render: function(frm) {
         if (frm.is_new()) {
             if (frm.doc.__islocal) {
-                frappe.db.get_list('User', {
-                    fields: ['name'],
-                    filters: {
-                        has_role: 'Expence Entry Operator'
-                    }
-            }).then(records => {
-                    if (records) {
-                        console.log(records)
-                        const userNames = records.map(r => r.name);
-                        if (userNames.includes(frappe.session.user)) {
-                       
+                if (frappe.session.user.has_role('Expence Entry Operator')) {
+                        console.log("Current user is a Cash User");
+                        // add_expense_operator_rows(frm);
                         hide_fields_for_expense_operator(frm);
-            			frm.add_custom_button(__("Quick Entry Custom"), function () {
-            			return quick_entry(frm);
-            		
-            			})
+                        frm.add_custom_button(__("Quick Entry Custom"), function () {
+                        return quick_entry(frm);
+                    
+                        })
                         // Small delay to make sure button is rendered
                         setTimeout(() => {
                             const quickEntryBtn = document.querySelector('button[data-label="Quick%20Entry%20Custom"]');
@@ -183,11 +165,8 @@ frappe.ui.form.on('Journal Entry', {
                                 quickEntryBtn.click();
                             } 
                             }, 700);
-                        }   
-                    }       
-                   
-                })
-            }   
+                }
+            }
         }
     }
 })
