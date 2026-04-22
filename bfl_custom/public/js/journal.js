@@ -275,7 +275,7 @@ function hide_fields_for_expense_operator(frm) {
                                 }
                             });
         
-                            dialog.set_value("cash_account", cash_account);
+                            dialog.set_value("credit_account", cash_account);
                         }
                     }
                 });
