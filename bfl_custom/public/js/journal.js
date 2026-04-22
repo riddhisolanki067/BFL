@@ -268,28 +268,30 @@ function hide_fields_for_expense_operator(frm) {
                         fields: ["name", "accounts"]
                     },
                     callback: function (r) {
-            if (r.message && r.message.length) {
-                const emp = r.message[0];
+                    console.log("Employee Fetch Response:", r);
 
-                // Now fetch full doc to get child table
-                frappe.call({
-                    method: "frappe.client.get",
-                    args: {
-                        doctype: "Employee",
-                        name: emp.name
-                    },ck: function (r) {
-                        if (r.message && r.message.accounts) {
-                            console.log(r.message)
-                            const accounts = r.message.accounts;
-                            console.log("Employee Accounts:", accounts);
-        
-                            // loop through child table
-                            accounts.forEach(row => {
-                                if (row.company === company) {
-                                    cash_account = row.cash_account;
-                                }
-                            });
-        
+                    if (r.message && r.message.length) {
+                        const emp = r.message[0];
+
+                        // Now fetch full doc to get child table
+                        frappe.call({
+                            method: "frappe.client.get",
+                            args: {
+                                doctype: "Employee",
+                                name: emp.name
+                            },callback: function (r) {
+                                if (r.message && r.message.accounts) {
+                                    console.log(r.message)
+                                    const accounts = r.message.accounts;
+                                    console.log("Employee Accounts:", accounts);
+                
+                                    // loop through child table
+                                    accounts.forEach(row => {
+                                        if (row.company === company) {
+                                            cash_account = row.cash_account;
+                                        }
+                                    });
+                
                             dialog.set_value("credit_account", cash_account);
                           }
                     }
