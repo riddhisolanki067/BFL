@@ -150,7 +150,7 @@ frappe.ui.form.on('Journal Entry', {
     onload_post_render: function(frm) {
         if (frm.is_new()) {
             if (frm.doc.__islocal) {
-                if (frappe.session.user.has_role('Expence Entry Operator')) {
+                if (frappe.user.has_role('Expence Entry Operator')) {
                         console.log("Current user is a Cash User");
                         // add_expense_operator_rows(frm);
                         hide_fields_for_expense_operator(frm);
