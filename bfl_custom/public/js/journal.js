@@ -163,7 +163,7 @@ frappe.ui.form.on('Journal Entry', {
                 frappe.db.get_list('User', {
                     fields: ['name'],
                     filters: {
-                        role_profile_name: 'Cash User'
+                        has_role: 'Expence Entry Operator'
                     }
             }).then(records => {
                     if (records) {
@@ -173,7 +173,7 @@ frappe.ui.form.on('Journal Entry', {
                        
                         hide_fields_for_expense_operator(frm);
             			frm.add_custom_button(__("Quick Entry Custom"), function () {
-            				return quick_entry(frm);
+            			return quick_entry(frm);
             		
             			})
                         // Small delay to make sure button is rendered
