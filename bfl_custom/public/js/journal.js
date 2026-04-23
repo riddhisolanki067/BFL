@@ -175,7 +175,7 @@ frappe.ui.form.on('Journal Entry', {
 
 function hide_fields_for_expense_operator(frm) {
     // Hide specific fields (example: cheque_no, cheque_date, user_remark)
-    const fields_to_hide = ['cheque_no','company_gstin', 'cheque_date', 'multi_currency','finance_book','from_template','apply_tds','reference','write_off','printing_settings','addtional_info','subscription_section'];
+    const fields_to_hide = ['company_gstin', 'multi_currency','finance_book','from_template','apply_tds','reference','write_off','printing_settings','addtional_info','subscription_section'];
 
     fields_to_hide.forEach(f => {
         frm.set_df_property(f, 'hidden', 1);
