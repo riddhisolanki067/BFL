@@ -1,0 +1,89 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-04-26 15:35:33.506617",
+ "default_view": "List",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "month",
+  "type",
+  "employment_type",
+  "payment_type",
+  "column_break_jfvb",
+  "other_add",
+  "other_deduction",
+  "present_days"
+ ],
+ "fields": [
+  {
+   "fieldname": "month",
+   "fieldtype": "Select",
+   "label": "Month",
+    "options": "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "Weekly Salary\nMonthly Salary\nAdvance\nLoan"
+  },
+  {
+   "fieldname": "employment_type",
+   "fieldtype": "Link",
+   "label": "Employment Type",
+   "options": "Employment Type"
+  },
+  {
+   "fieldname": "payment_type",
+   "fieldtype": "Select",
+   "label": "Payment Type",
+   "options": "Bank\nCash"
+  },
+  {
+   "fieldname": "column_break_jfvb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "other_add",
+   "fieldtype": "Currency",
+   "label": "Other Add"
+  },
+  {
+   "fieldname": "other_deduction",
+   "fieldtype": "Currency",
+   "label": "Other Deduction"
+  },
+  {
+   "fieldname": "present_days",
+   "fieldtype": "Data",
+   "label": "Present days"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-04-26 15:37:51.504949",
+ "modified_by": "Administrator",
+ "module": "Bfl Custom",
+ "name": "Salary Report Details",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
