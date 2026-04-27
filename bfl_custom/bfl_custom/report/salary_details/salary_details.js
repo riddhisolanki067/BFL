@@ -30,7 +30,8 @@ frappe.query_reports["Salary Details"] = {
             label: __("Month"),
             fieldtype: "Select",
             options: "\nJanuary\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember",
-            reqd: 1
+            reqd: 1,
+            default: get_current_month()
         },
         {
             fieldname: "type",
@@ -52,15 +53,23 @@ frappe.query_reports["Salary Details"] = {
         },
     ],
 
-    formatter(value, row, column, data, default_formatter) {
-        if (!data || !data.employee) {
+    onload: function(report) {
+        report.page.set_primary_action(
+            __("Show Report"),
+            () => report.refresh(),
+            "fa fa-table"
+        );
+    },
+
+    formatter: function(value, row, column, data, default_formatter) {
+        if (!data) {
             return default_formatter(value, row, column, data);
         }
 
-        const eid = data.employee;
+        const row_key = data.row_key || `${data.employee || ""}__${row || 0}`;
 
-        if (!_salary_row_data[eid]) {
-            _salary_row_data[eid] = {
+        if (!_salary_row_data[row_key]) {
+            _salary_row_data[row_key] = {
                 days_present: flt(data.days_present),
                 per_day_salary: flt(data.per_day_salary),
                 other_addings: flt(data.other_addings),
@@ -71,52 +80,76 @@ frappe.query_reports["Salary Details"] = {
             };
         }
 
-        const rv = _salary_row_data[eid];
-        const computed = calc_all(rv);
+        const rv = _salary_row_data[row_key];
 
         if (EDITABLE_FIELDS.includes(column.fieldname)) {
-            return `<input
-                type="number"
-                class="salary-editable-input"
-                data-employee="${eid}"
-                data-field="${column.fieldname}"
-                value="${rv[column.fieldname] || 0}"
-                min="0"
-                step="any"
-                style="width:100%; text-align:right;"
-            >`;
+            if (data.is_total_row) {
+                return `<span style="font-weight:700;">${value || ""}</span>`;
+            }
+
+            const cur = rv[column.fieldname] || 0;
+
+            return `
+                <input
+                    type="text"
+                    inputmode="decimal"
+                    class="salary-editable-input"
+                    data-row-key="${row_key}"
+                    data-field="${column.fieldname}"
+                    value="${cur}"
+                    style="
+                        width: 100%;
+                        max-width: 110px;
+                        border: 1px solid var(--border-color, #d1d8dd);
+                        
+                        
+                        text-align: right;
+                        background: #fff;
+                        font-size: 12px;
+                    "
+                >
+            `;
         }
 
-        if (column.fieldname === "total_salary") {
-            return fmt_currency(computed.total_salary);
-        }
-        if (column.fieldname === "amount") {
-            return fmt_currency(computed.amount);
-        }
-        if (column.fieldname === "total_payable") {
-            return fmt_currency(computed.total_payable);
-        }
-        if (column.fieldname === "balance") {
-            const color = computed.balance < 0
-                ? "color:#e53935;font-weight:700;"
-                : "color:#2e7d32;font-weight:600;";
-            return `<span style="${color}">${fmt_currency(computed.balance)}</span>`;
+        if (CALCULATED_FIELDS.includes(column.fieldname)) {
+            const v = calc(column.fieldname, rv);
+
+            if (data.is_total_row) {
+                return `<span style="font-weight:700;">${fmt_currency(v)}</span>`;
+            }
+
+            if (column.fieldname === "balance") {
+                const color = v < 0
+                    ? "color:var(--red-500,#e53935);font-weight:700"
+                    : "color:var(--green-600,#2e7d32);font-weight:600";
+                return `<span style="${color}">${fmt_currency(v)}</span>`;
+            }
+
+            return fmt_currency(v);
         }
 
-        return default_formatter(value, row, column, data);
+        let formatted = default_formatter(value, row, column, data);
+
+        if (data.is_total_row) {
+            formatted = `<span style="font-weight:700;">${formatted || ""}</span>`;
+        }
+
+        return formatted;
     },
 
-    after_datatable_render(datatable) {
-        setup_input_handlers();
-    }
+    after_datatable_render: function(datatable) {
+        inject_grouped_header(datatable);
+        setup_input_handlers(datatable);
+    },
 };
 
-function flt(v) {
-    return parseFloat(v) || 0;
-}
+function calc(fieldname, rv) {
+    const total_salary = flt(rv.days_present) * flt(rv.per_day_salary);
+    const amount = flt(rv.other_addings) - flt(rv.other_deduction);
+    const total_payable = total_salary + amount;
+    const balance = total_payable - flt(rv.advance_amount) - flt(rv.loan_amount) - flt(rv.deduction_amount);
 
-function fmt_currency(v) {
-    return frappe.format(v, { fieldtype: "Currency" });
+    return { total_salary, amount, total_payable, balance }[fieldname] ?? 0;
 }
 
 function calc_all(rv) {
@@ -128,18 +161,106 @@ function calc_all(rv) {
     return { total_salary, amount, total_payable, balance };
 }
 
-function setup_input_handlers() {
-    $(document).off("input.salary", ".salary-editable-input");
+function fmt_currency(v) {
+    return frappe.format(v || 0, { fieldtype: "Currency" });
+}
 
-    $(document).on("input.salary", ".salary-editable-input", function () {
-        const eid = $(this).data("employee");
-        const field = $(this).data("field");
-        const value = flt($(this).val());
+function flt(v) {
+    if (v === null || v === undefined || v === "") return 0;
+    v = String(v).replace(/,/g, "").trim();
+    return parseFloat(v) || 0;
+}
 
-        if (!_salary_row_data[eid]) return;
+function setup_input_handlers(datatable) {
+    const $wrapper = $(datatable.wrapper || datatable.$datatable);
+    if (!$wrapper || !$wrapper.length) return;
 
-        _salary_row_data[eid][field] = value;
+    $wrapper.off("input.salary change.salary", ".salary-editable-input");
 
-        frappe.query_report.render_datatable();
+    $wrapper.on("input.salary change.salary", ".salary-editable-input", function () {
+        const $input = $(this);
+        const row_key = $input.data("row-key");
+        const field = $input.data("field");
+        const val = flt($input.val());
+
+        if (!_salary_row_data[row_key]) return;
+
+        _salary_row_data[row_key][field] = val;
+
+        const rv = _salary_row_data[row_key];
+        const results = calc_all(rv);
+
+        const $cell_in_row = $input.closest("[data-col-index]");
+        if (!$cell_in_row.length) return;
+
+        const $row_container = $cell_in_row.parent();
+        if (!$row_container.length) return;
+
+        const updates = {
+            [COL.total_salary]: fmt_currency(results.total_salary),
+            [COL.amount]: fmt_currency(results.amount),
+            [COL.total_payable]: fmt_currency(results.total_payable),
+            [COL.balance]: (function () {
+                const color = results.balance < 0
+                    ? "color:var(--red-500,#e53935);font-weight:700"
+                    : "color:var(--green-600,#2e7d32);font-weight:600";
+                return `<span style="${color}">${fmt_currency(results.balance)}</span>`;
+            })(),
+        };
+
+        Object.entries(updates).forEach(([col_idx, html]) => {
+            const $target = $row_container.find(`[data-col-index="${col_idx}"]`).first();
+            if ($target.length) {
+                const $content = $target.find(".dt-cell__content, .cell-content");
+                ($content.length ? $content : $target).html(html);
+            }
+        });
     });
+}
+
+function inject_grouped_header(datatable) {
+    const $wrapper = $(datatable.wrapper || datatable.$datatable);
+    if (!$wrapper || !$wrapper.length) return;
+
+    const $thead = $wrapper.find("thead");
+    if (!$thead.length) return;
+
+    $thead.find(".salary-group-header").remove();
+
+    const base = "text-align:center;font-weight:700;font-size:11px;padding:5px 4px;white-space:nowrap;border-bottom:2px solid var(--border-color,#d1d8dd);";
+    const empty = "border:none;background:transparent;";
+    const adv = "background:#fff8e1;color:#5d4037;border-left:2px solid #ffb74d;border-right:2px solid #ffb74d;border-radius:3px 3px 0 0;";
+    const loan = "background:#e3f2fd;color:#1565c0;border-left:2px solid #64b5f6;border-right:2px solid #64b5f6;border-radius:3px 3px 0 0;";
+
+    const cells = [
+        ["", 1, empty],
+        ["", 1, empty],
+        ["", 1, empty],
+        ["", 1, empty],
+        ["", 1, empty],
+        ["", 1, empty],
+        ["", 1, empty],
+        ["", 1, empty],
+        ["", 1, empty],
+        ["", 1, empty],
+        ["", 1, empty],
+        ["⬇ Advance", 2, adv],
+        ["⬇ Loan", 2, loan],
+        ["", 1, empty],
+        ["", 1, empty],
+    ];
+
+    let html = `<tr class="salary-group-header">`;
+    cells.forEach(([label, colspan, extra]) => {
+        html += `<th colspan="${colspan}" style="${base}${extra}">${label ? __(label) : ""}</th>`;
+    });
+    html += `</tr>`;
+    $thead.prepend(html);
+}
+
+function get_current_month() {
+    return [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ][new Date().getMonth()];
 }
