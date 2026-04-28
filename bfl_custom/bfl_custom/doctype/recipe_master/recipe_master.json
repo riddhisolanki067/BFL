@@ -1,0 +1,148 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-04-28 19:10:20.679302",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "recipe_material_tab",
+  "product",
+  "naming_series",
+  "column_break_onjn",
+  "box",
+  "section_break_qbcv",
+  "items",
+  "section_break_ahxf",
+  "total_qty",
+  "total_yeild",
+  "total_amount",
+  "column_break_xwnr",
+  "total_moisture_loss",
+  "total_qty_loss",
+  "total_box",
+  "pack_material_tab",
+  "table_mrjy"
+ ],
+ "fields": [
+  {
+   "fieldname": "product",
+   "fieldtype": "Link",
+   "label": "Product",
+   "link_filters": "[[\"Item\",\"item_group\",\"=\",\"FINISHED GOOD\"]]",
+   "options": "Item"
+  },
+  {
+   "fieldname": "box",
+   "fieldtype": "Float",
+   "label": "Box"
+  },
+  {
+   "fieldname": "column_break_onjn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_qbcv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "RECIPE ITEM"
+  },
+  {
+   "fieldname": "total_qty",
+   "fieldtype": "Currency",
+   "label": "Total Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_moisture_loss",
+   "fieldtype": "Float",
+   "label": "Total Moisture Loss",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_yeild",
+   "fieldtype": "Float",
+   "label": "Total Yeild",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_box",
+   "fieldtype": "Float",
+   "label": "Total Box",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_qty_loss",
+   "fieldtype": "Float",
+   "label": "Total Qty Loss",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_ahxf",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Float",
+   "label": "Total Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_xwnr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "recipe_material_tab",
+   "fieldtype": "Tab Break",
+   "label": "Recipe Material"
+  },
+  {
+   "fieldname": "pack_material_tab",
+   "fieldtype": "Tab Break",
+   "label": "Pack Material"
+  },
+  {
+   "fieldname": "table_mrjy",
+   "fieldtype": "Table",
+   "options": "PACK RECIPE ITEM"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-04-28 23:18:23.312031",
+ "modified_by": "Administrator",
+ "module": "Bfl Custom",
+ "name": "RECIPE MASTER",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

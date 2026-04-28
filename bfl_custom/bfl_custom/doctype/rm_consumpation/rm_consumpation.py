@@ -13,15 +13,16 @@ class RMConsumpation(Document):
 			previous_date = add_days(self.date, -1)
 
 			opening_qty = frappe.db.sql("""
-				SELECT closing
-				FROM `tabRm Consumpation Item`
-				WHERE item = %s
-				AND parent IN (
-					SELECT name FROM `tabRM Consumpation`
-					WHERE date = %s
-				)
-				LIMIT 1
-			""", (row.item, previous_date), as_dict=1)
+			SELECT rci.closing
+			FROM `tabRm Consumpation Item` rci
+			INNER JOIN `tabRM Consumpation` rc
+				ON rci.parent = rc.name
+			WHERE rci.item = %s
+			AND rc.date < %s
+			ORDER BY rc.date DESC
+			LIMIT 1
+			""", (row.item, self.date), as_dict=1)
+
 
 			row.opening = opening_qty[0].closing if opening_qty else 0
 

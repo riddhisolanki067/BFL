@@ -1,0 +1,89 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-04-28 19:16:54.629053",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "material",
+  "qty_in_kg",
+  "uom",
+  "mosture_loss",
+  "qty_loss",
+  "yeild",
+  "rate",
+  "amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "material",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Material",
+   "link_filters": "[[\"Item\",\"item_group\",\"in\",[\"RM\",\"FLAVOUR\"]]]",
+   "options": "Item"
+  },
+  {
+   "fieldname": "qty_in_kg",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Qty in Kg"
+  },
+  {
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "UOM",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "mosture_loss",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Mosture Loss"
+  },
+  {
+   "fieldname": "qty_loss",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Qty Loss",
+   "read_only": 1
+  },
+  {
+   "fieldname": "yeild",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Yeild",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Rate"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-04-28 23:11:28.190762",
+ "modified_by": "Administrator",
+ "module": "Bfl Custom",
+ "name": "RECIPE ITEM",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
