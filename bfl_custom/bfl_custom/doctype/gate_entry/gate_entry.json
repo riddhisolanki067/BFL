@@ -30,7 +30,8 @@
   "item",
   "section_break_rbpe",
   "table_usbr",
-  "amended_from"
+  "amended_from",
+  "table_pgne"
  ],
  "fields": [
   {
@@ -175,13 +176,18 @@
    "fieldname": "remarks",
    "fieldtype": "Small Text",
    "label": "Remarks"
+  },
+  {
+   "fieldname": "table_pgne",
+   "fieldtype": "Table",
+   "options": "ATTACHMENT"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-08 15:50:15.620152",
+ "modified": "2026-04-29 11:35:57.714053",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "GATE ENTRY",
