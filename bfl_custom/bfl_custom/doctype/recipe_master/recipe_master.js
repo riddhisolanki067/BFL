@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("RECIPE MASTER", {
-    before_save: function(frm) {
+    before_save: async function(frm) {
 
         let total_qty = 0;
         let total_yield = 0;
@@ -28,6 +28,78 @@ frappe.ui.form.on("RECIPE MASTER", {
         if (frm.doc.box) {
             frm.set_value("total_box", total_yield / frm.doc.box);
         }
+
+
+        // ✅ 1. Copy fields
+        frm.set_value("product_copy", frm.doc.product);
+        frm.set_value("box_copy", frm.doc.box);
+
+        // ✅ 2. Stop if no product
+        if (!frm.doc.product) return;
+
+        try {
+            // ✅ 3. Get BOM for selected product
+            let bom_res = await frappe.call({
+                method: "frappe.client.get_list",
+                args: {
+                    doctype: "BOM",
+                    filters: {
+                        item: frm.doc.product,
+                        is_active: 1,
+                        is_default: 1
+                    },
+                    fields: ["name"],
+                    limit_page_length: 1
+                }
+            });
+
+            if (!bom_res.message.length) {
+                frappe.msgprint("No BOM found for selected product");
+                return;
+            }
+
+            let bom_name = bom_res.message[0].name;
+
+            // ✅ 4. Get BOM Items
+            let bom_doc = await frappe.call({
+                method: "frappe.client.get",
+                args: {
+                    doctype: "BOM",
+                    name: bom_name
+                }
+            });
+
+            let items = bom_doc.message.items || [];
+
+            // ✅ 5. Clear existing pack material table
+            frm.clear_table("pack_material_items");
+
+            // ✅ 6. Fill child table
+            items.forEach(bom_item => {
+
+                let row = frm.add_child("pack_material_items");
+
+                row.item = bom_item.item_code;
+                row.uom = bom_item.uom;
+                row.rate = bom_item.rate || 0;
+
+                // actual qty from BOM
+                row.qty_required = bom_item.qty;
+
+                // qty = total box
+                row.qty = frm.doc.total_box || 0;
+
+                // amount = qty * rate
+                row.amount = row.qty * row.rate;
+            });
+
+            frm.refresh_field("pack_material_items");
+
+        } catch (e) {
+            console.error(e);
+            frappe.msgprint("Error fetching BOM data");
+        }
+    
     }
 });
 frappe.ui.form.on("RECIPE ITEM", {

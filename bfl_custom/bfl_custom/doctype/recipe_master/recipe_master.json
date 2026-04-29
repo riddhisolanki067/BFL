@@ -22,7 +22,11 @@
   "total_qty_loss",
   "total_box",
   "pack_material_tab",
-  "table_mrjy"
+  "product_copy",
+  "column_break_wlha",
+  "box_copy",
+  "section_break_crtp",
+  "pack_material_items"
  ],
  "fields": [
   {
@@ -106,21 +110,41 @@
    "label": "Pack Material"
   },
   {
-   "fieldname": "table_mrjy",
-   "fieldtype": "Table",
-   "options": "PACK RECIPE ITEM"
-  },
-  {
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "hidden": 1,
    "label": "Naming Series"
+  },
+  {
+   "fieldname": "product_copy",
+   "fieldtype": "Link",
+   "label": "Product",
+   "link_filters": "[[\"Item\",\"item_group\",\"=\",\"FINISHED GOOD\"]]",
+   "options": "Item"
+  },
+  {
+   "fieldname": "box_copy",
+   "fieldtype": "Float",
+   "label": "Box"
+  },
+  {
+   "fieldname": "column_break_wlha",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_crtp",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "pack_material_items",
+   "fieldtype": "Table",
+   "options": "PACK RECIPE ITEM"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-28 23:18:23.312031",
+ "modified": "2026-04-29 14:51:42.358414",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "RECIPE MASTER",
