@@ -9,7 +9,10 @@
   "item",
   "machine",
   "contractor",
-  "box"
+  "box",
+  "opening_box",
+  "box_issued",
+  "box_balance"
  ],
  "fields": [
   {
@@ -39,13 +42,28 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Box"
+  },
+  {
+   "fieldname": "opening_box",
+   "fieldtype": "Float",
+   "label": "Opening BOX"
+  },
+  {
+   "fieldname": "box_issued",
+   "fieldtype": "Float",
+   "label": "BOX Issued"
+  },
+  {
+   "fieldname": "box_balance",
+   "fieldtype": "Float",
+   "label": "BOX Balance"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-24 20:03:02.127872",
+ "modified": "2026-04-29 18:30:37.196641",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "Packing Production Item",
