@@ -8,6 +8,7 @@
  "field_order": [
   "item",
   "qty",
+  "uom",
   "batch_data"
  ],
  "fields": [
@@ -31,13 +32,20 @@
    "fieldtype": "Long Text",
    "label": "batch_data",
    "read_only": 1
+  },
+  {
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Uom",
+   "options": "UOM"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-04-29 00:32:34.031986",
+ "modified": "2026-05-01 18:20:56.937995",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "Mixing Production Batch Item",

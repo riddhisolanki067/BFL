@@ -103,6 +103,11 @@ frappe.ui.form.on("RECIPE MASTER", {
     }
 });
 frappe.ui.form.on("RECIPE ITEM", {
+    qty: function(frm, cdt, cdn) {
+        let row = locals[cdt][cdn];
+        convert_to_kg(row)    
+    },
+    
     qty_in_kg: function(frm, cdt, cdn) {
         calculate_row(frm, cdt, cdn);
     },
@@ -173,4 +178,23 @@ function get_last_purchase_rate(item_code) {
         }
         return 0;
     });
+}
+function convert_to_kg(row) {
+    let qty = flt(row.qty);
+    let uom = (row.uom || "")
+    let qty_in_kg = 0;
+
+    if (uom === "Kg") {
+        qty_in_kg = qty;
+    } else if (uom === "Gram") {
+        qty_in_kg = qty / 1000;
+    } else if (uom === "Litre") {
+        qty_in_kg = qty;
+    } else if (uom === "Millilitre") {
+        qty_in_kg = qty / 1000;
+    } else {
+        qty_in_kg = 0;
+    }
+
+    frappe.model.set_value(row.doctype, row.name, "qty_in_kg", qty_in_kg);
 }

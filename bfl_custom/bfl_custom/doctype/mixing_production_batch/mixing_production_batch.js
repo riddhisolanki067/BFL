@@ -12,6 +12,50 @@ frappe.ui.form.on("MIXING PRODUCTION BATCH", {
      before_save(frm) {
         update_batch_data_for_count(frm);
         render_batch_matrix(frm);
+    },
+    product: function(frm) {
+        if (!frm.doc.product) {
+            frm.clear_table('items_table');
+            frm.refresh_field('items_table');
+            render_batch_matrix(frm);
+            return;
+        }
+
+        frappe.db.get_list('RECIPE MASTER', {
+            filters: {
+                product: frm.doc.product
+            },
+            fields: ['name'],
+            limit: 1
+        }).then((records) => {
+            if (!records || !records.length) {
+                frm.clear_table('items_table');
+                frm.refresh_field('items_table');
+                render_batch_matrix(frm);
+                frappe.msgprint(__('No Recipe Master found for product {0}', [frm.doc.product]));
+                return;
+            }
+
+            let receipt_master_name = records[0].name;
+
+            frappe.model.with_doc('RECIPE MASTER', receipt_master_name, function() {
+                let source_doc = frappe.model.get_doc('RECIPE MASTER', receipt_master_name);
+
+                frm.clear_table('items_table');
+
+                (source_doc.items || []).forEach(row => {
+                    let d = frm.add_child('items_table');
+                    d.item = row.material;
+                    d.qty = row.qty;
+                    d.uom = row.uom;
+                    d.batch_data = '';
+                });
+
+                frm.refresh_field('items_table');
+
+               
+            });
+        });
     }
 });
 
