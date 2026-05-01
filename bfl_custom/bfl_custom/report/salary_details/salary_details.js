@@ -37,7 +37,7 @@ frappe.query_reports["Salary Details"] = {
             fieldname: "type",
             label: __("Type"),
             fieldtype: "Select",
-            options: "\nWeekly Salary\nAdvance Salary\nAdvance\nLoan",
+            options: "\nAdvance\nLoan",
         },
         {
             fieldname: "payment_type",
