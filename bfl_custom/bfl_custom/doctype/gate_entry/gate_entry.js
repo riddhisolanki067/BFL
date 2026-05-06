@@ -55,3 +55,17 @@ frappe.ui.form.on("GATE ENTRY", {
         });
     }
 }); 
+
+frappe.ui.form.on("GATE ENTRY ITEM", {
+	qty: function(frm, cdt, cdn) {
+		let row = locals[cdt][cdn];
+		let amount = (flt(row.qty) || 0) * (flt(row.rate) || 0);
+		frappe.model.set_value(cdt, cdn, "value", amount);
+	},
+
+	rate: function(frm, cdt, cdn) {
+		let row = locals[cdt][cdn];
+		let amount = (flt(row.qty) || 0) * (flt(row.rate) || 0);
+		frappe.model.set_value(cdt, cdn, "value", amount);
+	}
+});

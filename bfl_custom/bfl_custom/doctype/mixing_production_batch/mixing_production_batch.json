@@ -43,7 +43,9 @@
   {
    "fieldname": "date",
    "fieldtype": "Date",
-   "label": "Date"
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1
   },
   {
    "fieldname": "naming_series",
@@ -72,7 +74,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-05-06 12:33:26.651902",
+ "modified": "2026-05-06 14:29:49.655357",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "MIXING PRODUCTION BATCH",
