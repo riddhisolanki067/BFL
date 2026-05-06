@@ -165,6 +165,10 @@ doc_events = {
 				"before_save": "bfl_custom.py.api.validate_suspense"
 		
 	},
+	"Item": {
+		"before_insert": "bfl_custom.py.item.item_update",
+		
+	},
 		"Purchase Invoice": {
 				"before_save": "bfl_custom.py.api.validate_suspense"
 		}
