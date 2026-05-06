@@ -8,9 +8,11 @@
  "field_order": [
   "batch_count",
   "product",
+  "start_time",
   "column_break_ekvc",
   "date",
   "naming_series",
+  "end_time",
   "section_break_fzph",
   "items_table",
   "table"
@@ -55,12 +57,22 @@
   {
    "fieldname": "section_break_fzph",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "start_time",
+   "fieldtype": "Time",
+   "label": "Start Time"
+  },
+  {
+   "fieldname": "end_time",
+   "fieldtype": "Time",
+   "label": "End Time"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-29 00:32:00.995401",
+ "modified": "2026-05-06 12:33:26.651902",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "MIXING PRODUCTION BATCH",
