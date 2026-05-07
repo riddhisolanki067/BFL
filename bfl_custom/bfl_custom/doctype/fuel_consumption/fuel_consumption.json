@@ -1,11 +1,14 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "naming_series:",
  "creation": "2026-05-07 22:05:54.812287",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "date",
+  "column_break_kwyk",
+  "naming_series",
   "section_break_fdnr",
   "items"
  ],
@@ -24,15 +27,26 @@
    "fieldtype": "Table",
    "label": "Items",
    "options": "Fuel Consumption Detail"
+  },
+  {
+   "fieldname": "column_break_kwyk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "FC.-.DD.-.MM.-.YY.-.###"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-05-07 22:58:41.507173",
+ "modified": "2026-05-07 23:46:16.391739",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "Fuel Consumption",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
