@@ -292,7 +292,15 @@ function hide_fields_for_expense_operator(frm) {
                                         }
                                     });
                 
-                            dialog.set_value("credit_account", cash_account);
+                           const payment_type = dialog.get_value("custom_payment_type");
+
+                                if (payment_type === "Pay") {
+                                    dialog.set_value("credit_account", cash_account);
+                                    dialog.set_value("debit_account", "");
+                                } else if (payment_type === "Receive") {
+                                    dialog.set_value("debit_account", cash_account);
+                                    dialog.set_value("credit_account", "");
+                                }
                           }
                     }
                 });

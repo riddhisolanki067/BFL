@@ -1,0 +1,99 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-05-07 22:23:16.129673",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "item",
+  "burner_1_qty_consumed",
+  "burner_2_qty_consumed",
+  "burner_3_qty_consumed",
+  "total_consumption",
+  "start_time",
+  "end_time",
+  "burner_breakdown",
+  "total_working_hour",
+  "consumption_per_hour"
+ ],
+ "fields": [
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "burner_1_qty_consumed",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Burner 1 Qty Consumed"
+  },
+  {
+   "fieldname": "burner_2_qty_consumed",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Burner 2 Qty Consumed"
+  },
+  {
+   "fieldname": "burner_3_qty_consumed",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Burner 3 Qty Consumed"
+  },
+  {
+   "fieldname": "total_consumption",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Total Consumption"
+  },
+  {
+   "fieldname": "start_time",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "label": "Start Time"
+  },
+  {
+   "fieldname": "end_time",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "label": "End Time"
+  },
+  {
+   "fieldname": "burner_breakdown",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "label": "Burner Breakdown"
+  },
+  {
+   "fieldname": "total_working_hour",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Total Working Hour",
+   "precision": "1"
+  },
+  {
+   "fieldname": "consumption_per_hour",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Consumption Per Hour"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-07 23:14:37.364189",
+ "modified_by": "Administrator",
+ "module": "Bfl Custom",
+ "name": "Fuel Consumption Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
