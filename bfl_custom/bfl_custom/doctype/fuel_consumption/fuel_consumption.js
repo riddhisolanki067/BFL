@@ -9,7 +9,49 @@ frappe.ui.form.on("Fuel Consumption Detail", {
 
 });
 
+frappe.ui.form.on("Fuel Consumption", {
 
+    onload(frm) {
+
+        // ONLY FOR NEW DOCUMENT
+        if (!frm.is_new()) {
+            return;
+        }
+
+        // PREVENT DUPLICATE ADD
+        if (frm.doc.items && frm.doc.items.length > 0) {
+            return;
+        }
+
+        // GET ALL ITEMS OF FUEL GROUP
+        frappe.call({
+            method: "frappe.client.get_list",
+            args: {
+                doctype: "Item",
+                filters: {
+                    item_group: "FUEL"
+                },
+                fields: ["name"],
+                limit_page_length: 1000
+            },
+            callback: function(r) {
+
+                if (r.message) {
+
+                    r.message.forEach(function(d) {
+
+                        let row = frm.add_child("items");
+
+                        row.item = d.name;
+                    });
+
+                    frm.refresh_field("items");
+                }
+            }
+        });
+    }
+
+});
 
 function calculate_values(frm, cdt, cdn) {
 
