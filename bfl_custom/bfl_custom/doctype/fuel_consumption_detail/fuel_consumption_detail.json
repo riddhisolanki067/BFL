@@ -15,7 +15,10 @@
   "end_time",
   "burner_breakdown",
   "total_working_hour",
-  "consumption_per_hour"
+  "consumption_per_hour",
+  "wastage_b01",
+  "wastage_b02",
+  "wastage_b03"
  ],
  "fields": [
   {
@@ -79,13 +82,28 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Consumption Per Hour"
+  },
+  {
+   "fieldname": "wastage_b01",
+   "fieldtype": "Float",
+   "label": "Wastage B01"
+  },
+  {
+   "fieldname": "wastage_b02",
+   "fieldtype": "Float",
+   "label": "Wastage B02"
+  },
+  {
+   "fieldname": "wastage_b03",
+   "fieldtype": "Float",
+   "label": "Wastage B03"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-05-07 23:14:37.364189",
+ "modified": "2026-05-11 12:07:58.858212",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "Fuel Consumption Detail",
