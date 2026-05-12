@@ -1,0 +1,44 @@
+{
+ "add_total_row": 0,
+ "add_translate_data": 0,
+ "columns": [],
+ "creation": "2026-05-12 17:59:13.441720",
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "mandatory": 1,
+   "wildcard_filter": 0
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "mandatory": 1,
+   "wildcard_filter": 0
+  }
+ ],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": null,
+ "modified": "2026-05-12 17:59:13.441720",
+ "modified_by": "Administrator",
+ "module": "Bfl Custom",
+ "name": "Fuel Consumption",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT\n\n    fc.name AS \"Fuel Consumption:Link/Fuel Consumption:180\",\n    fc.date AS \"Date:Date:120\",\n\n    fcd.item AS \"Item:Link/Item:180\",\n\n    fcd.burner_1_qty_consumed AS \"Burner 1 Qty:Float:140\",\n    fcd.burner_2_qty_consumed AS \"Burner 2 Qty:Float:140\",\n    fcd.burner_3_qty_consumed AS \"Burner 3 Qty:Float:140\",\n    fcd.wastage_b01 AS \"Wastage 1 Qty:Float:140\",\n    fcd.wastage_b02 AS \"Wastage 2 Qty:Float:140\",\n    fcd.wastage_b03 AS \"Wastage 3 Qty:Float:140\",\n\n    fcd.total_consumption AS \"Total Consumption:Float:160\",\n\n    fcd.start_time AS \"Start Time:Time:120\",\n    fcd.end_time AS \"End Time:120\",\n\n    fcd.burner_breakdown AS \"Burner Breakdown:Time:150\",\n\n    fcd.total_working_hour AS \"Total Working Hour:Float:160\",\n\n    fcd.consumption_per_hour AS \"Consumption Per Hour:Float:180\"\n\nFROM\n    `tabFuel Consumption` fc\n\nLEFT JOIN\n    `tabFuel Consumption Detail` fcd\nON\n    fcd.parent = fc.name\n\nWHERE\n    fc.docstatus < 2\n\n    AND fc.date BETWEEN %(from_date)s\n    AND %(to_date)s\n\nORDER BY\n    fc.date DESC,\n    fc.name DESC",
+ "ref_doctype": "Fuel Consumption",
+ "report_name": "Fuel Consumption",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  }
+ ],
+ "timeout": 0
+}
