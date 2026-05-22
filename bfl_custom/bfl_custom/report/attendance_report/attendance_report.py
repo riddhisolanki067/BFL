@@ -1,4 +1,5 @@
 
+
 import frappe
 from frappe import _
 from frappe.utils import getdate, get_datetime, format_time
@@ -170,6 +171,14 @@ def get_data(filters):
             else:
                 emp_data[emp][date]["out"].append(t)
 
+    # ---- For each employee+date: sort IN asc, OUT asc so
+    #      ins[0]  = earliest punch-in  (FIRST IN)
+    #      outs[-1] = latest punch-out  (LAST OUT)
+    for emp in emp_data:
+        for date in emp_data[emp]:
+            emp_data[emp][date]["in"].sort()
+            emp_data[emp][date]["out"].sort()
+
     # ---- Build date range list -------------------------------------------
     days = date_diff(filters.to_date, filters.from_date) + 1
     date_list = [
@@ -191,18 +200,21 @@ def get_data(filters):
 
         for d in date_list:
             day_checkins = emp_data[emp].get(d, {"in": [], "out": []})
-            ins  = day_checkins["in"]
-            outs = day_checkins["out"]
+            ins  = day_checkins["in"]   # already sorted ascending
+            outs = day_checkins["out"]  # already sorted ascending
 
-            # First IN / first OUT for display
-            row[f"in_{d}"]  = ins[0]  if ins  else ""
-            row[f"out_{d}"] = outs[0] if outs else ""
+            # FIRST IN (earliest) and LAST OUT (latest)
+            first_in  = ins[0]   if ins  else ""
+            last_out  = outs[-1] if outs else ""
 
-            # Accumulate worked duration (pair first IN with first OUT)
-            if ins and outs:
+            row[f"in_{d}"]  = first_in
+            row[f"out_{d}"] = last_out
+
+            # Accumulate worked duration: FIRST IN → LAST OUT
+            if first_in and last_out:
                 try:
-                    t_in  = datetime.datetime.strptime(d + " " + ins[0],  "%Y-%m-%d %H:%M")
-                    t_out = datetime.datetime.strptime(d + " " + outs[0], "%Y-%m-%d %H:%M")
+                    t_in  = datetime.datetime.strptime(d + " " + first_in, "%Y-%m-%d %H:%M")
+                    t_out = datetime.datetime.strptime(d + " " + last_out,  "%Y-%m-%d %H:%M")
                     if t_out > t_in:
                         total_td += t_out - t_in
                 except Exception:
