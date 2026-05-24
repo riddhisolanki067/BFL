@@ -70,7 +70,7 @@ def get_data(filters):
         WHERE
             e.name NOT IN (
                 SELECT DISTINCT fep.employee
-                FROM `tabFace Employee Profile` fep
+                FROM `tabEmployee Face Profile` fep
                 WHERE fep.employee IS NOT NULL
                   AND fep.employee != ''
             )
