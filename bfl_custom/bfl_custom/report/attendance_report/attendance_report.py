@@ -213,6 +213,8 @@ def get_data(filters):
             employee      = emp,
             employee_name = meta["employee_name"],
             designation   = meta["designation"],
+            company   = meta["company"],
+            custom_per_day_salary   = meta["custom_per_day_salary"],
         )
 
         for d in date_list:
