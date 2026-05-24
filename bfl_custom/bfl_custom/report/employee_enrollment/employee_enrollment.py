@@ -54,7 +54,6 @@ def get_columns():
 
 
 def get_data(filters):
-    conditions = get_conditions(filters)
 
     # Get all employees NOT present in Face Employee Profile
     data = frappe.db.sql(
@@ -75,13 +74,8 @@ def get_data(filters):
                 WHERE fep.employee IS NOT NULL
                   AND fep.employee != ''
             )
-            {conditions}
-        ORDER BY
-            e.name ASC
-        """.format(
-            conditions=conditions
-        ),
-        filters,
+          
+	""",
         as_dict=True,
     )
 
