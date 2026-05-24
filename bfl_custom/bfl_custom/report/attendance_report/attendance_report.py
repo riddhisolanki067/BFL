@@ -59,6 +59,19 @@ def get_columns(filters):
             "fieldtype": "Data",
             "width": 130,
         },
+        {
+            "fieldname": "company",
+            "label": _("Company"),
+            "fieldtype": "Data",
+            "width": 130,
+        },
+        {
+            "fieldname": "custom_per_day_salary",
+            "label": _("Per Day Salary"),
+            "fieldtype": "Data",
+            "width": 130,
+        },
+        
     ]
 
     # Generate one pair of columns per date
@@ -120,6 +133,8 @@ def get_data(filters):
             ec.employee,
             ec.employee_name,
             e.designation,
+            e.company,
+            e.custom_per_day_salary,
             DATE(ec.time)          AS checkin_date,
             TIME(ec.time)          AS checkin_time,
             ec.log_type
@@ -155,6 +170,8 @@ def get_data(filters):
         emp_meta[emp] = {
             "employee_name": row.employee_name,
             "designation":   row.designation or "",
+            "company":         row.company or "",
+            "custom_per_day_salary": row.custom_per_day_salary or 0
         }
 
         log_type = (row.log_type or "").upper()
