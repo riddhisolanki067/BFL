@@ -37,6 +37,7 @@
    "options": "Item"
   },
   {
+   "fetch_from": "product.custom_box",
    "fieldname": "box",
    "fieldtype": "Float",
    "label": "Box"
@@ -144,7 +145,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-29 14:51:42.358414",
+ "modified": "2026-05-30 15:54:27.482328",
  "modified_by": "Administrator",
  "module": "Bfl Custom",
  "name": "RECIPE MASTER",
